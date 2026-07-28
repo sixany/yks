@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YKS Eczacılık Sıralama Analizi & Simülatörü</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fcfaf7;
+            color: #2d3748;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+            max-height: 400px;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+        .scenario-active {
+            border: 2px solid #319795;
+            transform: scale(1.02);
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="max-w-6xl mx-auto px-4 py-8">
+        <!-- Header -->
+        <header class="text-center mb-12">
+            <h1 class="text-4xl font-extrabold text-gray-900 mb-4">Eczacılık Fakültesi Sıralama Değişim Analizi</h1>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto">2025 dinamikleri ve kontenjan kısıtlamaları ışığında, 74.000 sıralamaya sahip adaylar için stratejik yerleşme simülasyonu.</p>
+        </header>
+
+        <!-- Dashboard: Mevcut Durum Özeti -->
+        <section class="mb-16">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                <div class="glass-card p-6 rounded-2xl shadow-sm text-center">
+                    <p class="text-sm font-semibold text-gray-500 uppercase tracking-wider">Yasal Baraj</p>
+                    <p class="text-3xl font-bold text-red-600">100.000</p>
+                    <p class="text-xs text-gray-400 mt-2">SAY Puan Türü Alt Sınırı</p>
+                </div>
+                <div class="glass-card p-6 rounded-2xl shadow-sm text-center border-t-4 border-teal-500">
+                    <p class="text-sm font-semibold text-gray-500 uppercase tracking-wider">Sizin Sıralamanız</p>
+                    <p class="text-3xl font-bold text-teal-600">74.000</p>
+                    <p class="text-xs text-gray-400 mt-2">2025 Dinamiklerine Uyarlanmış</p>
+                </div>
+                <div class="glass-card p-6 rounded-2xl shadow-sm text-center">
+                    <p class="text-sm font-semibold text-gray-500 uppercase tracking-wider">Kontenjan Değişimi</p>
+                    <p class="text-3xl font-bold text-orange-600">-%24</p>
+                    <p class="text-xs text-gray-400 mt-2">YÖK Kapasite Daralması</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+                <div class="space-y-4">
+                    <h2 class="text-2xl font-bold text-gray-800">Eczacılık Ekosistemi ve Sıralama Yelpazesi</h2>
+                    <p class="text-gray-600 leading-relaxed">
+                        Eczacılık Fakülteleri, Türkiye genelinde 109 program seçeneği sunmaktadır. Devlet üniversitelerinde yerleşme bandı oldukça dardır (32k - 53k). 74.000 sıralaması olan bir aday için devlet üniversitesi ihtimali istatistiksel olarak düşüktür; ancak vakıf üniversitelerinin indirimli programlarında çok güçlü bir konumda yer almaktadır.
+                    </p>
+                    <div class="bg-teal-50 p-4 rounded-lg border-l-4 border-teal-400">
+                        <span class="font-bold text-teal-800">Kritik Not:</span> Devlet üniversitelerinin en düşük kapanışı 53.170 (Ağrı İ. Çeçen) olup, kontenjan daralması bu sınırı daha da yukarı çekecektir.
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="rankingRangeChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Senaryo Simülatörü -->
+        <section class="mb-16 bg-white p-8 rounded-3xl shadow-xl border border-gray-100">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-gray-900 mb-2">90.000 Bandındaki Programların Akıbeti</h2>
+                <p class="text-gray-600">Tercih kılavuzunda 90 bin olan bir bölüm, sizin 74 binlik sıralamanız için ne kadar güvenli?</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                <!-- Senaryo A -->
+                <div id="cardA" class="p-6 rounded-2xl bg-gray-50 border-2 border-transparent cursor-pointer hover:bg-white hover:shadow-md transition-all" onclick="toggleScenario('A')">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="px-3 py-1 bg-red-100 text-red-700 text-xs font-bold rounded-full uppercase">Senaryo A: Sıkılaşma</span>
+                        <div class="h-8 w-8 rounded-full bg-red-500 flex items-center justify-center text-white">▲</div>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">Sıralama Yukarı Kayar (75k - 80k)</h3>
+                    <p class="text-sm text-gray-500 mb-4">Kontenjan azlığı ve Tıp/Diş barajına takılanların talebiyle program daha değerli hale gelir.</p>
+                    <ul class="text-xs space-y-2 text-gray-600">
+                        <li>• Devletten kayan %50 indirimli adaylar</li>
+                        <li>• Sağlık alanına sabit yüksek talep</li>
+                        <li>• 10-15 binlik yukarı çekilme riski</li>
+                    </ul>
+                </div>
+
+                <!-- Senaryo B -->
+                <div id="cardB" class="p-6 rounded-2xl bg-gray-50 border-2 border-transparent cursor-pointer hover:bg-white hover:shadow-md transition-all" onclick="toggleScenario('B')">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-bold rounded-full uppercase">Senaryo B: Gevşeme</span>
+                        <div class="h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center text-white">▼</div>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">Sıralama Aşağı Kayar (95k - 100k)</h3>
+                    <p class="text-sm text-gray-500 mb-4">Artan eğitim ücretleri ve mühendislik alanlarına yönelim talebi düşürür.</p>
+                    <ul class="text-xs space-y-2 text-gray-600">
+                        <li>• Ekonomik fiyat duyarlılığı</li>
+                        <li>• Yazılım/Bilgisayar alanına kayış</li>
+                        <li>• 100.000 barajı kısıtı</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Interaktif Durum Çubuğu -->
+            <div class="relative pt-12 pb-8">
+                <div class="h-4 w-full bg-gray-200 rounded-full relative">
+                    <!-- Marker: User -->
+                    <div class="absolute -top-10 transition-all duration-500 ease-out" style="left: 74%;">
+                        <div class="bg-teal-600 text-white text-xs font-bold px-2 py-1 rounded mb-1 whitespace-nowrap">SİZ (74K)</div>
+                        <div class="w-1 h-12 bg-teal-600 mx-auto"></div>
+                    </div>
+                    <!-- Marker: Guide 90k -->
+                    <div id="guideMarker" class="absolute -top-10 transition-all duration-500 ease-out" style="left: 90%;">
+                        <div class="bg-gray-800 text-white text-xs font-bold px-2 py-1 rounded mb-1 whitespace-nowrap">KILAVUZ (90K)</div>
+                        <div class="w-1 h-12 bg-gray-800 mx-auto"></div>
+                    </div>
+                </div>
+                <div class="flex justify-between mt-8 text-[10px] text-gray-400 font-mono">
+                    <span>30.000 (Yüksek)</span>
+                    <span>100.000 (Baraj)</span>
+                </div>
+            </div>
+
+            <div id="resultBox" class="mt-6 p-5 rounded-xl bg-teal-50 border border-teal-100 text-center">
+                <p class="text-teal-800 font-semibold">Sonuç: Her iki senaryoda da 74.000 sıralaması ile 90.000'lik bir programa yerleşme ihtimaliniz <span class="underline">çok yüksektir</span>.</p>
+            </div>
+        </section>
+
+        <!-- Stratejik Tercih Yapılandırması -->
+        <section class="mb-16">
+            <div class="flex flex-col md:flex-row gap-10 items-start">
+                <div class="w-full md:w-1/3">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4">Tercih Stratejisi</h2>
+                    <p class="text-gray-600 text-sm mb-6 leading-relaxed">
+                        Riske girmemek için 24 tercih hakkınızı farklı başarı aralıklarına dağıtmalısınız. 74k sıralama ile "ideal hedef" bölgesi 70k-85k arasıdır.
+                    </p>
+                    <div class="chart-container !h-64">
+                        <canvas id="quotaDonut"></canvas>
+                    </div>
+                </div>
+                <div class="w-full md:w-2/3 overflow-hidden rounded-2xl border border-gray-200 shadow-sm">
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-50 border-b border-gray-200">
+                            <tr>
+                                <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Grup</th>
+                                <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Aralık</th>
+                                <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Analiz</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200 bg-white">
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 py-1 bg-yellow-100 text-yellow-800 text-[10px] font-bold rounded">1-5: Hayal</span></td>
+                                <td class="px-6 py-4 text-sm">60k - 70k</td>
+                                <td class="px-6 py-4 text-xs text-gray-500">Sürpriz gevşemeler için üst vakıf programları.</td>
+                            </tr>
+                            <tr class="bg-teal-50">
+                                <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 py-1 bg-teal-100 text-teal-800 text-[10px] font-bold rounded">6-15: Hedef</span></td>
+                                <td class="px-6 py-4 text-sm font-bold">70k - 85k</td>
+                                <td class="px-6 py-4 text-xs text-gray-600 font-medium">Asıl yerleşme bölgesi. 90k'lık programlar burada olmalı.</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 py-1 bg-green-100 text-green-800 text-[10px] font-bold rounded">16-24: Garanti</span></td>
+                                <td class="px-6 py-4 text-sm">85k - 100k</td>
+                                <td class="px-6 py-4 text-xs text-gray-500">Tam güvenlik çemberi. Açıkta kalma riskini sıfırlar.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <footer class="text-center text-gray-400 text-xs border-t border-gray-100 pt-8 pb-12">
+            <p>© 2025 YKS Eczacılık Tercih Danışmanı Simülasyonu</p>
+            <p class="mt-2 italic">Veriler YÖK Atlas ve son analiz raporları baz alınarak modellenmiştir.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Chart Initialization: Ranking Ranges
+        const ctxRange = document.getElementById('rankingRangeChart').getContext('2d');
+        new Chart(ctxRange, {
+            type: 'bar',
+            data: {
+                labels: ['Hacettepe (Devlet En Üst)', 'Ağrı İ.Ç. (Devlet En Alt)', 'Vakıf Burslu (Ortalama)', 'Vakıf Ücretli (En Alt)'],
+                datasets: [{
+                    label: 'Başarı Sırası (Kişi)',
+                    data: [32500, 53170, 42000, 99470],
+                    backgroundColor: [
+                        'rgba(45, 55, 72, 0.7)',
+                        'rgba(45, 55, 72, 0.5)',
+                        'rgba(49, 151, 149, 0.7)',
+                        'rgba(49, 151, 149, 0.4)'
+                    ],
+                    borderRadius: 8,
+                    barThickness: 40
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: { enabled: true }
+                },
+                scales: {
+                    x: { 
+                        max: 110000,
+                        grid: { display: false }
+                    },
+                    y: { grid: { display: false } }
+                }
+            }
+        });
+
+        // Chart Initialization: Quota Distribution
+        const ctxQuota = document.getElementById('quotaDonut').getContext('2d');
+        new Chart(ctxQuota, {
+            type: 'doughnut',
+            data: {
+                labels: ['Devlet (1.773)', 'Vakıf (1.685)'],
+                datasets: [{
+                    data: [1773, 1685],
+                    backgroundColor: ['#2d3748', '#319795'],
+                    borderWidth: 0,
+                    hoverOffset: 10
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom' }
+                },
+                cutout: '70%'
+            }
+        });
+
+        // Interactive Logic for Scenarios
+        function toggleScenario(type) {
+            const guide = document.getElementById('guideMarker');
+            const res = document.getElementById('resultBox');
+            const cardA = document.getElementById('cardA');
+            const cardB = document.getElementById('cardB');
+
+            if (type === 'A') {
+                guide.style.left = '78%';
+                res.innerHTML = '<p class="text-orange-800 font-semibold">Senaryo A (Sıkılaşma): Program 78.000 seviyesine çıksa bile, 74.000 ile hâlâ <span class="underline">yaklaşık 4.000 kişi önündesiniz</span>. İhtimal %85+.</p>';
+                res.className = "mt-6 p-5 rounded-xl bg-orange-50 border border-orange-100 text-center";
+                cardA.classList.add('scenario-active');
+                cardB.classList.remove('scenario-active');
+            } else {
+                guide.style.left = '96%';
+                res.innerHTML = '<p class="text-blue-800 font-semibold">Senaryo B (Gevşeme): Program 96.000 seviyesine geriliyor. 74.000 sıralamanızla bu bölüme yerleşmeniz <span class="underline">kesinleşiyor</span>. İhtimal %100.</p>';
+                res.className = "mt-6 p-5 rounded-xl bg-blue-50 border border-blue-100 text-center";
+                cardB.classList.add('scenario-active');
+                cardA.classList.remove('scenario-active');
+            }
+        }
+    </script>
+</body>
+</html>
