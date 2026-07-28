@@ -5,6 +5,89 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>YKS Akıllı Otonom Koç & Dashboard</title>
   <style>
+
+    /* HAMBURGER MENÜ & SIDEBAR STİLLERİ */
+.menu-btn {
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-size: 24px;
+  cursor: pointer;
+  width: auto;
+  padding: 5px 10px;
+  margin-bottom: 0;
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -280px; /* Başlangıçta gizli */
+  width: 280px;
+  height: 100%;
+  background-color: var(--card);
+  border-right: 1px solid #334155;
+  box-shadow: 5px 0 15px rgba(0,0,0,0.5);
+  transition: left 0.3s ease;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.sidebar.active {
+  left: 0; /* Menü açıldığında */
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #334155;
+  padding-bottom: 15px;
+  margin-bottom: 20px;
+}
+
+.close-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  font-size: 20px;
+  cursor: pointer;
+  width: auto;
+}
+
+.sidebar-menu {
+  list-style: none;
+}
+
+.sidebar-menu li a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 15px;
+  color: var(--text);
+  text-decoration: none;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.sidebar-menu li a:hover {
+  background-color: #0f172a;
+  color: var(--accent);
+}
+
+/* Karartma Arka Planı (Overlay) */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: none;
+  z-index: 999;
+}
+.overlay.active {
+  display: block;
+}
     :root {
       --bg: #0f172a;
       --card: #1e293b;
@@ -424,4 +507,20 @@
     }
   </script>
 </body>
+  <!-- Karartma Ekranı -->
+<div id="overlay" class="overlay" onclick="toggleSidebar()"></div>
+
+<!-- Yan Menü (Sidebar) -->
+<div id="sidebar" class="sidebar">
+  <div class="sidebar-header">
+    <h3 style="color:var(--accent);">Menü</h3>
+    <button class="close-btn" onclick="toggleSidebar()">&times;</button>
+  </div>
+  <ul class="sidebar-menu">
+    <li><a href="#" onclick="toggleSidebar()">🏠 Ana Sayfa</a></li>
+    <li><a href="#" onclick="alert('Ayarlar yakında eklenecek!'); toggleSidebar();">⚙️ Ayarlar</a></li>
+    <hr style="border-color:#334155; margin: 10px 0;">
+    <li><a href="#" onclick="handleLogout()" style="color:var(--danger);">🚪 Çıkış Yap</a></li>
+  </ul>
+</div>
 </html>
