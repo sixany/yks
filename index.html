@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PerforXYZs - YKS Akıllı Koçluk</title>
+  <title>PerforXYZs - YKS Akıllı Koçluk & Çalışma Platformu</title>
+  <!-- Grafik Çizimi İçin Chart.js Kütüphanesi -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     /* ================= ÖSYM GERÇEK TEMA RENKLERİ ================= */
     :root[data-theme="dark"] {
@@ -17,6 +19,7 @@
       --osym-gray: #2c2c2c;
       --danger: #ef4444;
       --warning: #ffb74d;
+      --success: #10b981;
       --shadow: rgba(0, 0, 0, 0.5);
     }
 
@@ -31,6 +34,7 @@
       --osym-gray: #424242;
       --danger: #dc2626;
       --warning: #f57c00;
+      --success: #059669;
       --shadow: rgba(0, 0, 0, 0.08);
     }
 
@@ -67,7 +71,6 @@
     .nav-left { display: flex; align-items: center; gap: 15px; }
     .logo-text { font-size: 24px; font-weight: 900; color: var(--osym-orange); letter-spacing: -0.5px; }
 
-    /* MENÜ BUTONU VE KARE TEMA BUTONU */
     .menu-btn {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
@@ -83,7 +86,6 @@
     }
     .menu-btn:hover { border-color: var(--osym-orange); transform: translateY(-2px); }
 
-    /* KARE, HOVER EFEKTSİZ TEMA BUTONU */
     .theme-toggle {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
@@ -92,18 +94,12 @@
       cursor: pointer;
       width: 40px;
       height: 40px;
-      border-radius: 8px; /* Tam kare köşeler için */
+      border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 0;
-      transition: none; /* Hover animasyonunu kaldırır */
-    }
-    .theme-toggle:hover {
-      /* Hover efektleri tamamen pasifleşti */
-      border-color: var(--card-border);
-      transform: none;
-      box-shadow: none;
+      transition: none;
     }
 
     /* SIDEBAR (YAN MENÜ) ================= */
@@ -119,40 +115,39 @@
       transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       z-index: 1000;
       padding: 25px;
+      overflow-y: auto;
     }
     .sidebar.active { left: 0; }
     .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-    
-    /* Küçültülmüş Sidebar Logosu */
-    .sidebar-logo {
-      font-size: 18px;
-      font-weight: 800;
-      color: var(--osym-orange);
-    }
+    .sidebar-logo { font-size: 18px; font-weight: 800; color: var(--osym-orange); }
 
-    /* Küçültülmüş Kapatma Butonu */
     .close-btn {
-      background: transparent;
-      border: none;
-      color: var(--text-dim);
-      font-size: 18px;
-      line-height: 1;
-      padding: 4px 8px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text);
+      font-size: 16px;
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       cursor: pointer;
+      padding: 0;
     }
-    .close-btn:hover { color: var(--text); }
+    .close-btn:hover { border-color: var(--osym-orange); color: var(--osym-orange); }
 
     .sidebar-menu { list-style: none; }
     .sidebar-menu li a {
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 14px 18px;
+      padding: 12px 16px;
       color: var(--text);
       text-decoration: none;
       border-radius: 10px;
       font-weight: 500;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
     .sidebar-menu li a:hover { background-color: var(--card-bg); color: var(--osym-orange); }
     .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(3px); display: none; z-index: 999; }
@@ -170,13 +165,11 @@
       perspective: 1000px;
       will-change: transform;
     }
-
     .tilt-card:hover {
       box-shadow: 0 15px 30px var(--shadow);
       border-color: var(--osym-orange);
     }
 
-    /* ÜST GRID */
     .drawing-top-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -184,12 +177,7 @@
       margin-bottom: 25px;
     }
 
-    .user-profile-card {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
-
+    .user-profile-card { display: flex; align-items: center; gap: 20px; }
     .profile-card-avatar {
       width: 80px;
       height: 80px;
@@ -198,52 +186,54 @@
       border: 3px solid var(--osym-orange);
       background: var(--bg);
     }
-
     .profile-card-info h2 { font-size: 22px; color: var(--text); margin-bottom: 4px; }
     .profile-card-info p { font-size: 14px; color: var(--osym-orange); font-weight: 600; }
     .profile-card-info small { color: var(--text-dim); font-size: 12px; display: block; margin-top: 2px; }
 
-    .timer-card {
+    .timer-card { display: flex; justify-content: space-between; align-items: center; }
+    .timer-info span { font-size: 13px; color: var(--text-dim); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+    .timer-info h2 { font-size: 32px; color: var(--osym-orange); margin-top: 5px; font-weight: 800; }
+
+    /* MOTİVASYON BARI VE SERİ */
+    .quote-box {
+      background: var(--card-bg);
+      border-left: 4px solid var(--osym-orange);
+      padding: 15px 20px;
+      border-radius: 10px;
+      margin-bottom: 25px;
+      font-style: italic;
+      color: var(--text);
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
+    .streak-badge {
+      background: rgba(245, 124, 0, 0.15);
+      color: var(--osym-orange);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-style: normal;
+      font-size: 14px;
+      white-space: nowrap;
+    }
 
-    .timer-info span { font-size: 13px; color: var(--text-dim); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
-    .timer-info h2 { font-size: 32px; color: var(--osym-orange); margin-top: 5px; font-weight: 800; }
-
-    /* Minimalist ÖSYM Saat İkonu */
-    .clock-icon {
-      width: 65px;
-      height: 65px;
-      border: 4px solid var(--osym-orange);
-      border-radius: 50%;
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    /* İLERLEME BARI */
+    .progress-container {
+      margin-top: 15px;
       background: var(--bg);
+      border-radius: 10px;
+      height: 12px;
+      overflow: hidden;
+      border: 1px solid var(--card-border);
     }
-    .clock-icon::before {
-      content: '';
-      position: absolute;
-      width: 3px;
-      height: 20px;
+    .progress-bar {
+      height: 100%;
       background: var(--osym-orange);
-      top: 10px;
-      border-radius: 2px;
-    }
-    .clock-icon::after {
-      content: '';
-      position: absolute;
-      width: 14px;
-      height: 3px;
-      background: var(--osym-orange);
-      right: 12px;
-      border-radius: 2px;
+      width: 0%;
+      transition: width 0.4s ease;
     }
 
-    /* ALT GRİD DÜZENLERİ */
     .full-width-card { margin-bottom: 25px; }
     .full-width-card h2 { font-size: 20px; margin-bottom: 18px; color: var(--osym-orange); letter-spacing: -0.3px; }
 
@@ -252,6 +242,49 @@
       grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
       gap: 25px;
     }
+
+    /* FLASHCARD (BİLGİ KARTI) STİLİ */
+    .flashcard {
+      background: var(--bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 20px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      user-select: none;
+      transition: transform 0.3s;
+    }
+    .flashcard:active { transform: scale(0.98); }
+
+    /* CHAT STİLLERİ ================= */
+    .chat-box {
+      height: 380px;
+      overflow-y: auto;
+      border: 1px solid var(--card-border);
+      background: var(--bg);
+      border-radius: 12px;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 15px;
+    }
+    .chat-message { max-width: 75%; padding: 10px 14px; border-radius: 12px; font-size: 14px; line-height: 1.4; word-wrap: break-word; }
+    .chat-message.own { align-self: flex-end; background-color: var(--osym-orange); color: #fff; border-bottom-right-radius: 2px; }
+    .chat-message.other { align-self: flex-start; background-color: var(--card-bg); border: 1px solid var(--card-border); color: var(--text); border-bottom-left-radius: 2px; }
+    .chat-user { font-size: 11px; font-weight: 700; opacity: 0.8; margin-bottom: 3px; display: block; }
+    .chat-time { font-size: 10px; opacity: 0.6; float: right; margin-left: 8px; margin-top: 4px; }
+
+    /* TABLOLAR */
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid var(--card-border); font-size: 14px; }
+    th { color: var(--osym-orange); font-weight: 700; }
 
     /* FORM ELEMANLARI */
     input, textarea, select, button {
@@ -266,7 +299,6 @@
       outline: none;
     }
     input:focus, textarea:focus, select:focus { border-color: var(--osym-orange); box-shadow: 0 0 0 3px rgba(245, 124, 0, 0.2); }
-    input[disabled] { opacity: 0.6; cursor: not-allowed; }
     
     button {
       background-color: var(--osym-orange);
@@ -274,25 +306,12 @@
       font-weight: 700;
       cursor: pointer;
       border: none;
-      transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
-      box-shadow: 0 4px 12px rgba(245, 124, 0, 0.3);
+      transition: transform 0.2s, background-color 0.2s;
     }
-    button:hover { background-color: var(--osym-orange-hover); transform: translateY(-2px); box-shadow: 0 6px 18px rgba(245, 124, 0, 0.4); }
-
-    .lock-notice {
-      background: rgba(245, 124, 0, 0.1);
-      border: 1px solid var(--osym-orange);
-      color: var(--osym-orange);
-      padding: 12px 16px;
-      border-radius: 10px;
-      font-size: 13px;
-      margin-bottom: 15px;
-    }
+    button:hover { background-color: var(--osym-orange-hover); transform: translateY(-2px); }
 
     .item-list { list-style: none; margin-top: 15px; }
     .item-card { background: var(--bg); padding: 14px; border-radius: 10px; margin-bottom: 10px; border-left: 4px solid var(--osym-orange); }
-    
-    .avatar-large { width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 3px solid var(--osym-orange); margin-bottom: 10px; }
     .badge { display: inline-block; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; margin-top: 6px; }
     .badge-dikkat { background: var(--warning); color: #000; }
     .badge-bilgi { background: var(--danger); color: #fff; }
@@ -311,13 +330,20 @@
     </div>
     <ul class="sidebar-menu">
       <li><a href="#" onclick="showSection('home')">🏠 Ana Sayfa</a></li>
-      <li><a href="#" onclick="showSection('settings')">⚙️ Ayarlar</a></li>
+      <li><a href="#" onclick="showSection('pomodoro')">⏱️ Pomodoro Odaklanma</a></li>
+      <li><a href="#" onclick="showSection('net-tracking')">📊 Net Takibi & Grafikler</a></li>
+      <li><a href="#" onclick="showSection('flashcards')">🃏 Bilgi Kartları (Flashcards)</a></li>
+      <li><a href="#" onclick="showSection('calc')">🧮 Puan / Sıralama Hesaplama</a></li>
+      <li><a href="#" onclick="showSection('topics')">📌 Çıkmış Soru Konu Dağılımı</a></li>
+      <li><a href="#" onclick="showSection('leaderboard')">🏆 Topluluk Sıralaması</a></li>
+      <li><a href="#" onclick="showSection('chat')">💬 Evrensel Chat</a></li>
+      <li><a href="#" onclick="showSection('settings')">⚙️ Ayarlar & Yedekleme</a></li>
       <hr style="border-color:var(--card-border); margin: 15px 0;">
       <li><a href="#" onclick="handleLogout()" style="color:var(--danger);">🚪 Çıkış Yap</a></li>
     </ul>
   </div>
 
-  <!-- 1. OTURUM AÇMA / KAYIT EKRANI -->
+  <!-- GİRİŞ EKRANI -->
   <div id="auth-screen">
     <div class="auth-brand">PerforXYZs</div>
     <div class="auth-tabs">
@@ -339,7 +365,7 @@
     </form>
   </div>
 
-  <!-- 2. DASHBOARD EKRANI -->
+  <!-- DASHBOARD EKRANI -->
   <div id="dashboard-screen">
     
     <nav>
@@ -350,12 +376,15 @@
       <button class="theme-toggle" onclick="toggleTheme()" id="theme-btn">☀️</button>
     </nav>
 
+    <!-- GÜNÜN MOTİVASYON SÖZÜ & STREAK -->
+    <div class="quote-box">
+      <span>💬 <strong id="quote-text">"Başarı, her gün tekrarlanan küçük çabaların toplamıdır."</strong></span>
+      <span class="streak-badge" id="streak-counter">🔥 1 Günlük Seri</span>
+    </div>
+
     <!-- ANA SAYFA -->
     <div id="section-home">
-      
-      <!-- ÜST KARTLAR (3D TILT EFEKTLİ) -->
       <div class="drawing-top-grid">
-        
         <div class="tilt-card user-profile-card">
           <img id="card-avatar" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Profil" class="profile-card-avatar">
           <div class="profile-card-info">
@@ -367,12 +396,25 @@
 
         <div class="tilt-card timer-card">
           <div class="timer-info">
-            <span>Kalan Süre</span>
+            <span>YKS Kalan Süre</span>
             <h2 id="yks-countdown">Yükleniyor...</h2>
           </div>
-          <div class="clock-icon"></div>
         </div>
+      </div>
 
+      <!-- GUNLUK SORU METRESİ -->
+      <div class="tilt-card full-width-card">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <h2>🎯 Günlük Soru Çözüm Hedefi</h2>
+          <span style="font-weight: 700; color: var(--osym-orange);" id="question-count-display">0 / 200 Soru</span>
+        </div>
+        <div class="progress-container">
+          <div class="progress-bar" id="question-progress-bar"></div>
+        </div>
+        <div style="display: flex; gap: 10px; margin-top: 15px;">
+          <input type="number" id="add-questions-input" placeholder="Çözülen soru sayısı ekle" style="margin-bottom: 0;">
+          <button onclick="addQuestions()" style="width: 150px; margin-bottom: 0;">Ekle</button>
+        </div>
       </div>
 
       <!-- ÖDEVLER PANELİ -->
@@ -383,13 +425,11 @@
           <input type="text" id="ytUrl" placeholder="YouTube Video Linki">
           <button onclick="addAssignment()" style="height: 45px;">Ödeve Ekle</button>
         </div>
-
         <ul id="assignmentList" class="item-list"></ul>
       </div>
 
       <!-- YANLIŞ HAVUZU & RAPOR -->
       <div class="bottom-grid">
-        
         <div class="tilt-card full-width-card" style="margin-bottom:0;">
           <h2 style="font-size:18px;">Yanlış / Hata Girişi Yap</h2>
           <select id="errSubject">
@@ -414,49 +454,149 @@
           <h3 style="font-size:14px; color:var(--text-dim);">Son Eklenen Hatalar:</h3>
           <ul id="errorList" class="item-list"></ul>
         </div>
-
       </div>
-
     </div>
 
-    <!-- AYARLAR SAYFASI -->
+    <!-- POMODORO ZAMANLAYICI -->
+    <div id="section-pomodoro" style="display: none;">
+      <div class="tilt-card full-width-card" style="max-width: 600px; margin: 0 auto; text-align: center;">
+        <h2>⏱️ Pomodoro Odaklanma Zamanlayıcısı</h2>
+        <div style="font-size: 64px; font-weight: 800; color: var(--osym-orange); margin: 20px 0;" id="pomo-timer">25:00</div>
+        
+        <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+          <button onclick="startPomodoro()">Başlat</button>
+          <button onclick="pausePomodoro()" style="background-color: var(--osym-gray);">Duraklat</button>
+          <button onclick="resetPomodoro()" style="background-color: var(--danger);">Sıfırla</button>
+        </div>
+
+        <hr style="border-color:var(--card-border); margin: 20px 0;">
+        <h3>🎧 Odaklanma Müzikleri / Sesleri</h3>
+        <select id="audio-select" onchange="changeBackgroundAudio()" style="margin-top: 10px;">
+          <option value="">Sessiz</option>
+          <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">Yağmur Sesleri (Acoustic Demo)</option>
+          <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3">Lo-Fi Çalışma Ritmi</option>
+        </select>
+        <audio id="bg-audio" loop></audio>
+      </div>
+    </div>
+
+    <!-- NET TAKİBİ VE GRAFİKLER -->
+    <div id="section-net-tracking" style="display: none;">
+      <div class="tilt-card full-width-card">
+        <h2>📊 Deneme Net Gelişim Grafiği</h2>
+        <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+          <input type="text" id="net-title" placeholder="Deneme Adı (Örn: ÖDER-1)">
+          <input type="number" id="net-tyt" placeholder="TYT Neti">
+          <input type="number" id="net-ayt" placeholder="AYT Neti">
+          <button onclick="addNetRecord()">Kaydet</button>
+        </div>
+        <div style="height: 300px; position: relative;">
+          <canvas id="netChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- FLASHCARDS (BİLGİ KARTLARI) -->
+    <div id="section-flashcards" style="display: none;">
+      <div class="tilt-card full-width-card" style="max-width: 600px; margin: 0 auto; text-align: center;">
+        <h2>🃏 YKS Pratik Bilgi Kartları</h2>
+        <p style="color:var(--text-dim); margin-bottom: 15px;">Cevabı görmek için karta tıkla!</p>
+        <div class="flashcard" id="flashcard-element" onclick="flipCard()">
+          <span id="flashcard-text">Soru Yükleniyor...</span>
+        </div>
+        <div style="display: flex; gap: 10px; margin-top: 15px;">
+          <button onclick="prevCard()" style="background-color: var(--osym-gray);">Önceki</button>
+          <button onclick="nextCard()">Sonraki Kart ➔</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PUAN / SIRALAMA HESAPLAMA -->
+    <div id="section-calc" style="display: none;">
+      <div class="tilt-card full-width-card" style="max-width: 600px; margin: 0 auto;">
+        <h2>🧮 Tahmini TYT Puan Hesaplayıcı</h2>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <div><label style="font-size:12px;">Türkçe Net:</label><input type="number" id="calc-tr" value="30"></div>
+          <div><label style="font-size:12px;">Sosyal Net:</label><input type="number" id="calc-sos" value="15"></div>
+          <div><label style="font-size:12px;">Matematik Net:</label><input type="number" id="calc-mat" value="25"></div>
+          <div><label style="font-size:12px;">Fen Net:</label><input type="number" id="calc-fen" value="15"></div>
+        </div>
+        <button onclick="calculateScore()" style="margin-top:10px;">Puanı Hesapla</button>
+        <div style="margin-top:15px; text-align:center; background:var(--bg); padding:15px; border-radius:10px;">
+          <h3 style="color:var(--osym-orange);" id="calc-result">Tahmini TYT Puanı: -</h3>
+        </div>
+      </div>
+    </div>
+
+    <!-- KONU DAĞILIMI -->
+    <div id="section-topics" style="display: none;">
+      <div class="tilt-card full-width-card">
+        <h2>📌 Son Yılların Çıkmış Soru Dağılımları</h2>
+        <table>
+          <thead>
+            <tr><th>Ders</th><th>En Çok Çıkan Konu</th><th>Ortalama Soru</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>TYT Matematik</td><td>Problemler</td><td>12-14 Soru</td></tr>
+            <tr><td>TYT Türkçe</td><td>Paragrafta Anlam</td><td>22-26 Soru</td></tr>
+            <tr><td>AYT Matematik</td><td>Türev & İntegral</td><td>8-10 Soru</td></tr>
+            <tr><td>AYT Kimya</td><td>Kimya ve Elektrik</td><td>2-3 Soru</td></tr>
+            <tr><td>AYT Biyoloji</td><td>Sistemler</td><td>4-5 Soru</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TOPLULUK LİDERLİK TABLOSU -->
+    <div id="section-leaderboard" style="display: none;">
+      <div class="tilt-card full-width-card" style="max-width: 700px; margin: 0 auto;">
+        <h2>🏆 Haftanın En Çok Çalışan Adayları</h2>
+        <table>
+          <thead>
+            <tr><th>Sıra</th><th>Kullanıcı</th><th>Rozet</th><th>Çözülen Soru</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>🥇 1</td><td>Ahmet_YKS</td><td>🔥 12 Gün Seri</td><td>1,450 Soru</td></tr>
+            <tr><td>🥈 2</td><td>Zeynep_Derece</td><td>🔥 8 Gün Seri</td><td>1,210 Soru</td></tr>
+            <tr><td>🥉 3</td><td>EczaciAdayi</td><td>🔥 5 Gün Seri</td><td>980 Soru</td></tr>
+            <tr><td>4</td><td>Sen</td><td>🔥 1 Gün Seri</td><td id="leaderboard-user-q">0 Soru</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- EVRENSEL CHAT SAYFASI -->
+    <div id="section-chat" style="display: none;">
+      <div class="tilt-card full-width-card" style="max-width: 800px; margin: 0 auto;">
+        <h2>💬 Evrensel YKS Sohbet Odası</h2>
+        <div class="chat-box" id="chat-messages-container"></div>
+        <form onsubmit="sendChatMessage(event)" style="display: flex; gap: 10px;">
+          <input type="text" id="chat-input" placeholder="Bir mesaj yazın..." style="margin-bottom: 0;" required autocomplete="off">
+          <button type="submit" style="width: 120px; margin-bottom: 0;">Gönder</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- AYARLAR VE YEDEKLEME -->
     <div id="section-settings" style="display: none;">
       <div class="tilt-card full-width-card" style="max-width: 600px; margin: 0 auto;">
-        <h2>⚙️ Profil ve Hesap Ayarları</h2>
-        
+        <h2>⚙️ Profil ve Ayarlar</h2>
         <div style="text-align: center; margin-bottom: 20px;">
-          <img id="settings-avatar-preview" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="avatar-large"><br>
-          <label style="font-size:12px; color:var(--text-dim); display:block; margin-bottom:8px;">Profil Fotoğrafı Yükle</label>
+          <img id="settings-avatar-preview" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" style="width:90px; height:90px; border-radius:50%; border:3px solid var(--osym-orange); margin-bottom:10px;"><br>
           <input type="file" id="avatar-input" accept="image/*" onchange="previewAndSaveAvatar(event)">
         </div>
-
-        <hr style="border-color:var(--card-border); margin: 20px 0;">
-
-        <label style="font-size: 13px; color: var(--text-dim);">Kullanıcı Adı (Değiştirilemez):</label>
-        <input type="text" id="settings-username" disabled>
-
-        <label style="font-size: 13px; color: var(--text-dim);">Görünen Ad:</label>
-        <input type="text" id="settings-displayname" placeholder="Görünen Adını Yaz">
-
-        <hr style="border-color:var(--card-border); margin: 20px 0;">
-
-        <h3 style="font-size: 16px; color: var(--osym-orange); margin-bottom: 12px;">🎯 Haftalık Hedef Ayarı</h3>
-        
-        <div id="target-lock-msg" class="lock-notice" style="display: none;">
-          🔒 Hedefiniz kilitli! Yeni hedef belirlemek için kilit süresinin dolmasını bekleyin.<br>
-          <strong>Kilit Açılmasına Kalan: <span id="lock-timer">-</span></strong>
-        </div>
-
-        <label style="font-size: 13px; color: var(--text-dim);">Hedef Üniversite:</label>
-        <input type="text" id="settings-uni" placeholder="Örn: İstanbul Teknik Üniversitesi">
-
-        <label style="font-size: 13px; color: var(--text-dim);">Hedef Fakülte / Bölüm:</label>
+        <label>Görünen Ad:</label>
+        <input type="text" id="settings-displayname">
+        <label>Hedef Üniversite / Bölüm:</label>
         <input type="text" id="settings-faculty" placeholder="Örn: Eczacılık Fakültesi">
+        <button onclick="saveProfileSettings()">Kaydet</button>
 
-        <label style="font-size: 13px; color: var(--text-dim);">Hedef Sıralama:</label>
-        <input type="text" id="settings-rank" placeholder="Örn: 2000">
-
-        <button onclick="saveProfileSettings()" style="margin-top: 10px;">Ayarları Kaydet</button>
+        <hr style="border-color:var(--card-border); margin: 20px 0;">
+        <h3>💾 Veri Yedekleme</h3>
+        <p style="font-size:12px; color:var(--text-dim); margin-bottom:10px;">Hatalarını ve verilerini dışa aktarabilir ya da yedekten yükleyebilirsin.</p>
+        <div style="display: flex; gap: 10px;">
+          <button onclick="exportData()" style="background-color: var(--success);">Verileri İndir (JSON)</button>
+        </div>
       </div>
     </div>
 
@@ -465,9 +605,35 @@
   <script>
     let currentUser = null;
     let stats = { bilgi: 0, dikkat: 0, sure: 0 };
+    let solvedQuestions = 0;
     const defaultAvatar = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
 
-    // --- MOUSE İLE 3D TILT EFEKTİ ---
+    // MOTİVASYON SÖZLERİ DİZİSİ
+    const quotes = [
+      "\"Başarı, her gün tekrarlanan küçük çabaların toplamıdır.\"",
+      "\"Gelecek, bugün ne yaptığına bağlıdır.\"",
+      "\"Zorluklar, başarının değerini artıran süslerdir.\"",
+      "\"Hedefe ulaşmak için önce yola çıkmak gerekir.\""
+    ];
+
+    // FLASHCARDS DİZİSİ
+    const cardsData = [
+      { q: "Hangi organel hücre içi sindirimden sorumludur?", a: "Lizozom" },
+      { q: "İntegralin geometrik anlamı nedir?", a: "Eğri altında kalan alandır." },
+      { q: "İdeal gaz denklemindeki 'R' nedir?", a: "Evrensel Gaz Sabiti" },
+      { q: "Simyayı kimyadan ayıran en önemli unsur nedir?", a: "Sistematik bilgi birikimi ve deney/tartı kullanımı" }
+    ];
+    let currentCardIndex = 0;
+    let showingAnswer = false;
+
+    // POMODORO DEĞİŞKENLERİ
+    let pomoInterval;
+    let pomoSeconds = 25 * 60;
+
+    // GRAFİK DEĞİŞKENİ
+    let netChartInstance = null;
+
+    // MOUSE TILT EFEKTİ
     document.addEventListener('mousemove', (e) => {
       const cards = document.querySelectorAll('.tilt-card');
       cards.forEach(card => {
@@ -478,23 +644,19 @@
         if (x >= 0 && x <= rect.width && y >= 0 && y <= rect.height) {
           const centerX = rect.width / 2;
           const centerY = rect.height / 2;
-
-          const rotateX = ((y - centerY) / centerY) * -8;
-          const rotateY = ((x - centerX) / centerX) * 8;
-
-          card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-6px)`;
+          const rotateX = ((y - centerY) / centerY) * -6;
+          const rotateY = ((x - centerX) / centerX) * 6;
+          card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
         } else {
           card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)';
         }
       });
     });
 
-    // --- TEMA TERCİHİ (LIGHT / DARK) ---
+    // TEMA İŞLEMLERİ
     function toggleTheme() {
       const html = document.documentElement;
-      const currentTheme = html.getAttribute('data-theme');
-      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-      
+      const newTheme = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
       html.setAttribute('data-theme', newTheme);
       document.getElementById('theme-btn').innerText = newTheme === 'dark' ? '☀️' : '🌙';
       localStorage.setItem('perforxyzs_theme', newTheme);
@@ -506,16 +668,22 @@
       document.getElementById('theme-btn').innerText = savedTheme === 'dark' ? '☀️' : '🌙';
     }
 
-    // --- SIDEBAR & SAYFA MANTIĞI ---
     function toggleSidebar() {
       document.getElementById('sidebar').classList.toggle('active');
       document.getElementById('overlay').classList.toggle('active');
     }
 
     function showSection(sectionName) {
-      document.getElementById('section-home').style.display = sectionName === 'home' ? 'block' : 'none';
-      document.getElementById('section-settings').style.display = sectionName === 'settings' ? 'block' : 'none';
-      if(sectionName === 'settings') checkTargetLockStatus();
+      const sections = ['home', 'pomodoro', 'net-tracking', 'flashcards', 'calc', 'topics', 'leaderboard', 'chat', 'settings'];
+      sections.forEach(s => {
+        const el = document.getElementById('section-' + s);
+        if(el) el.style.display = s === sectionName ? 'block' : 'none';
+      });
+
+      if(sectionName === 'chat') renderChatMessages();
+      if(sectionName === 'flashcards') renderFlashcard();
+      if(sectionName === 'net-tracking') initNetChart();
+
       toggleSidebar();
     }
 
@@ -538,25 +706,20 @@
       const displayName = document.getElementById('reg-displayname').value.trim();
       const pass = document.getElementById('reg-password').value;
 
-      if(localStorage.getItem('user_' + user)) {
-        alert("Bu kullanıcı adı zaten alınmış!");
-        return;
-      }
+      if(localStorage.getItem('user_' + user)) return alert("Bu kullanıcı adı zaten alınmış!");
 
       const userData = {
         username: user,
         displayName: displayName,
         password: pass,
         avatar: defaultAvatar,
-        targetUni: "",
         targetFaculty: "Eczacılık",
-        targetRank: "2000",
-        targetUnlockTime: 0,
-        stats: { bilgi: 0, dikkat: 0, sure: 0 }
+        questions: 0,
+        nets: []
       };
 
       localStorage.setItem('user_' + user, JSON.stringify(userData));
-      alert("Kayıt başarılı! Şimdi giriş yapabilirsiniz.");
+      alert("Kayıt başarılı!");
       switchAuthTab('login');
     }
 
@@ -579,8 +742,6 @@
     function handleLogout() {
       localStorage.removeItem('active_session');
       currentUser = null;
-      document.getElementById('sidebar').classList.remove('active');
-      document.getElementById('overlay').classList.remove('active');
       document.getElementById('dashboard-screen').style.display = 'none';
       document.getElementById('auth-screen').style.display = 'block';
     }
@@ -593,6 +754,7 @@
         loadDashboard();
       }
       startCountdown();
+      document.getElementById('quote-text').innerText = quotes[Math.floor(Math.random() * quotes.length)];
     };
 
     function loadDashboard() {
@@ -600,194 +762,201 @@
       document.getElementById('dashboard-screen').style.display = 'block';
 
       const userData = JSON.parse(localStorage.getItem('user_' + currentUser));
-
       document.getElementById('card-display-name').innerText = userData.displayName || currentUser;
       document.getElementById('card-username-tag').innerText = "@" + currentUser;
+      document.getElementById('card-target-text').innerText = "Hedef: " + (userData.targetFaculty || "Belirtilmedi");
 
-      renderTargetCard(userData);
+      solvedQuestions = userData.questions || 0;
+      updateQuestionProgress();
 
       const avatarSrc = userData.avatar || defaultAvatar;
       document.getElementById('card-avatar').src = avatarSrc;
       document.getElementById('settings-avatar-preview').src = avatarSrc;
-
-      document.getElementById('settings-username').value = currentUser;
       document.getElementById('settings-displayname').value = userData.displayName || "";
-      document.getElementById('settings-uni').value = userData.targetUni || "";
       document.getElementById('settings-faculty').value = userData.targetFaculty || "";
-      document.getElementById('settings-rank').value = userData.targetRank || "";
-
-      checkTargetLockStatus();
     }
 
-    function renderTargetCard(userData) {
-      let text = "Hedef: ";
-      if(userData.targetUni) text += userData.targetUni + " ";
-      if(userData.targetFaculty) text += userData.targetFaculty + " ";
-      if(userData.targetRank) text += `(${userData.targetRank}. Sıralama)`;
-      
-      if(!userData.targetUni && !userData.targetFaculty && !userData.targetRank) {
-        text = "Hedef: Henüz Belirtilmedi";
-      }
+    // GÜNLÜK SORU EKLEME
+    function addQuestions() {
+      const input = document.getElementById('add-questions-input');
+      const val = parseInt(input.value);
+      if(!val || val <= 0) return;
 
-      document.getElementById('card-target-text').innerText = text;
-    }
-
-    function checkTargetLockStatus() {
+      solvedQuestions += val;
       const userData = JSON.parse(localStorage.getItem('user_' + currentUser));
-      const now = new Date().getTime();
-      const unlockTime = userData.targetUnlockTime || 0;
-
-      const uniInput = document.getElementById('settings-uni');
-      const facultyInput = document.getElementById('settings-faculty');
-      const rankInput = document.getElementById('settings-rank');
-      const lockMsg = document.getElementById('target-lock-msg');
-
-      if(now < unlockTime) {
-        uniInput.disabled = true;
-        facultyInput.disabled = true;
-        rankInput.disabled = true;
-        lockMsg.style.display = 'block';
-
-        const diff = unlockTime - now;
-        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-
-        document.getElementById('lock-timer').innerText = `${days} Gün ${hours} Sa ${mins} Dk`;
-      } else {
-        uniInput.disabled = false;
-        facultyInput.disabled = false;
-        rankInput.disabled = false;
-        lockMsg.style.display = 'none';
-      }
-    }
-
-    function saveProfileSettings() {
-      const userData = JSON.parse(localStorage.getItem('user_' + currentUser));
-      const now = new Date().getTime();
-
-      const newDisplayName = document.getElementById('settings-displayname').value.trim();
-      const newUni = document.getElementById('settings-uni').value.trim();
-      const newFaculty = document.getElementById('settings-faculty').value.trim();
-      const newRank = document.getElementById('settings-rank').value.trim();
-
-      if(!newDisplayName) return alert("Lütfen görünen ad girin!");
-
-      const isTargetChanged = (newUni !== userData.targetUni) || (newFaculty !== userData.targetFaculty) || (newRank !== userData.targetRank);
-
-      if(isTargetChanged) {
-        if(now < (userData.targetUnlockTime || 0)) return alert("Hedefiniz kilitli!");
-        const sevenDaysInMs = 7 * 24 * 60 * 60 * 1000;
-        userData.targetUnlockTime = now + sevenDaysInMs;
-      }
-
-      userData.displayName = newDisplayName;
-      userData.targetUni = newUni;
-      userData.targetFaculty = newFaculty;
-      userData.targetRank = newRank;
-
+      userData.questions = solvedQuestions;
       localStorage.setItem('user_' + currentUser, JSON.stringify(userData));
 
-      document.getElementById('card-display-name').innerText = newDisplayName;
-      renderTargetCard(userData);
-      checkTargetLockStatus();
-
-      alert(isTargetChanged ? "Hedefler kaydedildi ve 1 haftalığına kilitlendi! 🎯" : "Profil ayarları kaydedildi!");
+      input.value = "";
+      updateQuestionProgress();
     }
 
-    function previewAndSaveAvatar(event) {
-      const file = event.target.files[0];
-      if (!file) return;
+    function updateQuestionProgress() {
+      document.getElementById('question-count-display').innerText = `${solvedQuestions} / 200 Soru`;
+      const pct = Math.min(100, Math.round((solvedQuestions / 200) * 100));
+      document.getElementById('question-progress-bar').style.width = pct + "%";
+      document.getElementById('leaderboard-user-q').innerText = `${solvedQuestions} Soru`;
+    }
 
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const base64Image = e.target.result;
-        document.getElementById('card-avatar').src = base64Image;
-        document.getElementById('settings-avatar-preview').src = base64Image;
+    // POMODORO MANTIĞI
+    function startPomodoro() {
+      clearInterval(pomoInterval);
+      pomoInterval = setInterval(() => {
+        pomoSeconds--;
+        const mins = Math.floor(pomoSeconds / 60).toString().padStart(2, '0');
+        const secs = (pomoSeconds % 60).toString().padStart(2, '0');
+        document.getElementById('pomo-timer').innerText = `${mins}:${secs}`;
 
-        const userData = JSON.parse(localStorage.getItem('user_' + currentUser));
-        userData.avatar = base64Image;
-        localStorage.setItem('user_' + currentUser, JSON.stringify(userData));
-      };
-      reader.readAsDataURL(file);
+        if(pomoSeconds <= 0) {
+          clearInterval(pomoInterval);
+          alert("Pomodoro Tamamlandı! Harika İş.");
+        }
+      }, 1000);
+    }
+    function pausePomodoro() { clearInterval(pomoInterval); }
+    function resetPomodoro() {
+      clearInterval(pomoInterval);
+      pomoSeconds = 25 * 60;
+      document.getElementById('pomo-timer').innerText = "25:00";
+    }
+
+    function changeBackgroundAudio() {
+      const audio = document.getElementById('bg-audio');
+      const src = document.getElementById('audio-select').value;
+      if(src) {
+        audio.src = src;
+        audio.play();
+      } else {
+        audio.pause();
+      }
+    }
+
+    // FLASHCARD MANTIĞI
+    function renderFlashcard() {
+      showingAnswer = false;
+      document.getElementById('flashcard-text').innerText = cardsData[currentCardIndex].q;
+    }
+    function flipCard() {
+      showingAnswer = !showingAnswer;
+      document.getElementById('flashcard-text').innerText = showingAnswer ? cardsData[currentCardIndex].a : cardsData[currentCardIndex].q;
+    }
+    function nextCard() {
+      currentCardIndex = (currentCardIndex + 1) % cardsData.length;
+      renderFlashcard();
+    }
+    function prevCard() {
+      currentCardIndex = (currentCardIndex - 1 + cardsData.length) % cardsData.length;
+      renderFlashcard();
+    }
+
+    // HESAPLAYICI MANTIĞI
+    function calculateScore() {
+      const tr = parseFloat(document.getElementById('calc-tr').value) || 0;
+      const sos = parseFloat(document.getElementById('calc-sos').value) || 0;
+      const mat = parseFloat(document.getElementById('calc-mat').value) || 0;
+      const fen = parseFloat(document.getElementById('calc-fen').value) || 0;
+
+      const score = 100 + (tr * 3.3) + (sos * 3.4) + (mat * 3.3) + (fen * 3.4);
+      document.getElementById('calc-result').innerText = `Tahmini TYT Puanı: ${score.toFixed(2)}`;
+    }
+
+    // NET GRAFİĞİ (CHART.JS)
+    function initNetChart() {
+      const ctx = document.getElementById('netChart').getContext('2d');
+      const userData = JSON.parse(localStorage.getItem('user_' + currentUser));
+      const nets = userData.nets || [
+        { name: "Deneme 1", tyt: 65, ayt: 40 },
+        { name: "Deneme 2", tyt: 72, ayt: 48 }
+      ];
+
+      const labels = nets.map(n => n.name);
+      const tytData = nets.map(n => n.tyt);
+      const aytData = nets.map(n => n.ayt);
+
+      if(netChartInstance) netChartInstance.destroy();
+
+      netChartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            { label: 'TYT Net', data: tytData, borderColor: '#F57C00', tension: 0.3 },
+            { label: 'AYT Net', data: aytData, borderColor: '#10b981', tension: 0.3 }
+          ]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+      });
+    }
+
+    function addNetRecord() {
+      const title = document.getElementById('net-title').value;
+      const tyt = parseFloat(document.getElementById('net-tyt').value) || 0;
+      const ayt = parseFloat(document.getElementById('net-ayt').value) || 0;
+
+      if(!title) return alert("Lütfen deneme adı girin!");
+
+      const userData = JSON.parse(localStorage.getItem('user_' + currentUser));
+      if(!userData.nets) userData.nets = [];
+      userData.nets.push({ name: title, tyt, ayt });
+
+      localStorage.setItem('user_' + currentUser, JSON.stringify(userData));
+      initNetChart();
+    }
+
+    // DIŞA AKTAR
+    function exportData() {
+      const userData = localStorage.getItem('user_' + currentUser);
+      const blob = new Blob([userData], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `${currentUser}_YKS_Yedek.json`;
+      a.click();
+    }
+
+    // ESKİ ÖZELLİKLER (CHAT & YANLIŞ RAPORU)
+    function sendChatMessage(e) {
+      e.preventDefault();
+      const input = document.getElementById('chat-input');
+      const text = input.value.trim();
+      if(!text) return;
+
+      const userData = JSON.parse(localStorage.getItem('user_' + currentUser));
+      const messages = JSON.parse(localStorage.getItem('perforxyzs_global_chat') || '[]');
+      const now = new Date();
+      messages.push({ user: userData.displayName || currentUser, username: currentUser, text: text, time: `${now.getHours()}:${now.getMinutes()}` });
+      localStorage.setItem('perforxyzs_global_chat', JSON.stringify(messages));
+      input.value = '';
+      renderChatMessages();
+    }
+
+    function renderChatMessages() {
+      const container = document.getElementById('chat-messages-container');
+      const messages = JSON.parse(localStorage.getItem('perforxyzs_global_chat') || '[]');
+      container.innerHTML = '';
+      messages.forEach(msg => {
+        const isOwn = msg.username === currentUser;
+        const msgDiv = document.createElement('div');
+        msgDiv.className = `chat-message ${isOwn ? 'own' : 'other'}`;
+        msgDiv.innerHTML = `<span class="chat-user">${isOwn ? 'Sen' : msg.user}</span>${msg.text}<span class="chat-time">${msg.time}</span>`;
+        container.appendChild(msgDiv);
+      });
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function processError() {
+      const note = document.getElementById('errNote').value;
+      if(!note) return alert("Not gir!");
+      stats.bilgi++;
+      document.getElementById('cntBilgi').innerText = stats.bilgi;
+      document.getElementById('errNote').value = "";
     }
 
     function startCountdown() {
       const yksDate = new Date("June 20, 2027 10:15:00").getTime();
-
-      setInterval(function() {
-        const now = new Date().getTime();
-        const distance = yksDate - now;
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        document.getElementById("yks-countdown").innerHTML = `${days} Gün`;
+      setInterval(() => {
+        const dist = yksDate - new Date().getTime();
+        document.getElementById("yks-countdown").innerText = `${Math.floor(dist / (1000 * 60 * 60 * 24))} Gün`;
       }, 1000);
-    }
-
-    function addAssignment() {
-      const title = document.getElementById('taskTitle').value;
-      const url = document.getElementById('ytUrl').value;
-      if(!title) return alert("Lütfen konu gir!");
-
-      let embedHtml = "";
-      if(url.includes("watch?v=")) {
-        const videoId = url.split("v=")[1].split("&")[0];
-        embedHtml = `<iframe width="100%" height="200" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen style="margin-top:10px; border-radius:8px;"></iframe>`;
-      }
-
-      const list = document.getElementById('assignmentList');
-      const li = document.createElement('li');
-      li.className = 'item-card';
-      li.innerHTML = `
-        <strong>${title}</strong>
-        ${embedHtml}
-        <label style="display:block; margin-top:8px; font-size:13px;">
-          <input type="checkbox" style="width:auto;"> Tamamlandı
-        </label>
-      `;
-      list.appendChild(li);
-      document.getElementById('taskTitle').value = "";
-      document.getElementById('ytUrl').value = "";
-    }
-
-    function processError() {
-      const subject = document.getElementById('errSubject').value;
-      const note = document.getElementById('errNote').value.toLowerCase();
-      if(!note) return alert("Lütfen not yaz!");
-
-      let category = "";
-      let badgeClass = "";
-
-      const dikkatKelimeleri = ["unuttum", "kaçırdım", "yanlış okudum", "dikkat", "gözden", "işlem hatası"];
-      const sureKelimeleri = ["yetmedi", "yetişmedi", "süre", "zaman", "yavaş"];
-
-      if (dikkatKelimeleri.some(k => note.includes(k))) {
-        category = "Dikkat Hatası";
-        badgeClass = "badge-dikkat";
-        stats.dikkat++;
-      } else if (sureKelimeleri.some(k => note.includes(k))) {
-        category = "Süre Hatası";
-        badgeClass = "badge-sure";
-        stats.sure++;
-      } else {
-        category = "Bilgi Eksikliği";
-        badgeClass = "badge-bilgi";
-        stats.bilgi++;
-      }
-
-      document.getElementById('cntBilgi').innerText = stats.bilgi;
-      document.getElementById('cntDikkat').innerText = stats.dikkat;
-      document.getElementById('cntSure').innerText = stats.sure;
-
-      const errorList = document.getElementById('errorList');
-      const li = document.createElement('li');
-      li.className = 'item-card';
-      li.innerHTML = `
-        <small style="color:var(--text-dim);">${subject}</small>
-        <p style="font-size:14px; margin: 4px 0;">"${document.getElementById('errNote').value}"</p>
-        <span class="badge ${badgeClass}">${category}</span>
-      `;
-      errorList.prepend(li);
-      document.getElementById('errNote').value = "";
     }
   </script>
 </body>
