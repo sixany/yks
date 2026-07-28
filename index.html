@@ -3,25 +3,72 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>YKS Akıllı Otomatik Koç</title>
+  <title>YKS Akıllı Otonom Koç & Dashboard</title>
   <style>
     :root {
       --bg: #0f172a;
       --card: #1e293b;
       --accent: #6366f1;
+      --accent-hover: #4f46e5;
       --text: #f8fafc;
       --text-dim: #94a3b8;
       --danger: #ef4444;
       --warning: #f59e0b;
       --info: #3b82f6;
+      --success: #10b981;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
-    body { background-color: var(--bg); color: var(--text); padding: 20px; }
+    body { background-color: var(--bg); color: var(--text); padding: 20px; min-height: 100vh; }
 
-    header { margin-bottom: 25px; border-bottom: 1px solid #334155; padding-bottom: 15px; }
-    h1 { color: var(--accent); font-size: 24px; }
-    p.subtitle { color: var(--text-dim); font-size: 14px; }
+    /* GİRİŞ / KAYIT EKRANI */
+    #auth-screen {
+      max-width: 400px;
+      margin: 80px auto;
+      background: var(--card);
+      padding: 30px;
+      border-radius: 12px;
+      border: 1px solid #334155;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    }
+    .auth-tabs { display: flex; margin-bottom: 20px; border-bottom: 1px solid #334155; }
+    .auth-tab { flex: 1; padding: 10px; text-align: center; cursor: pointer; color: var(--text-dim); }
+    .auth-tab.active { color: var(--accent); border-bottom: 2px solid var(--accent); font-weight: bold; }
+
+    /* DASHBOARD EKRANI */
+    #dashboard-screen { display: none; }
+    
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #334155;
+      margin-bottom: 25px;
+    }
+    .user-info { display: flex; align-items: center; gap: 15px; }
+
+    /* GERİ SAYIM & HEDEF KARTLARI */
+    .top-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-bottom: 25px;
+    }
+
+    .stat-card {
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      border: 1px solid #334155;
+      padding: 20px;
+      border-radius: 12px;
+      position: relative;
+    }
+    .countdown-timer {
+      font-size: 26px;
+      font-weight: bold;
+      color: var(--warning);
+      margin-top: 10px;
+    }
 
     .grid-container {
       display: grid;
@@ -35,7 +82,6 @@
       padding: 20px;
       border: 1px solid #334155;
     }
-
     .card h2 { font-size: 18px; margin-bottom: 15px; color: var(--accent); }
 
     /* Form & Input Stilleri */
@@ -55,90 +101,327 @@
       font-weight: bold;
       cursor: pointer;
       border: none;
-      transition: opacity 0.2s;
+      transition: background 0.2s;
     }
-    button:hover { opacity: 0.9; }
+    button:hover { background-color: var(--accent-hover); }
+    .btn-danger { background-color: var(--danger); width: auto; padding: 6px 12px; }
 
-    /* Etiket Stilleri */
-    .badge {
-      display: inline-block;
-      padding: 4px 8px;
-      border-radius: 4px;
-      font-size: 12px;
-      font-weight: bold;
-      margin-top: 5px;
-    }
+    /* Etiket & Liste Stilleri */
+    .badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; margin-top: 5px; }
     .badge-dikkat { background: var(--warning); color: #000; }
     .badge-bilgi { background: var(--danger); color: #fff; }
     .badge-sure { background: var(--info); color: #fff; }
 
-    /* Liste Stilleri */
     .item-list { list-style: none; margin-top: 10px; }
-    .item-card {
-      background: #0f172a;
-      padding: 10px;
-      border-radius: 6px;
-      margin-bottom: 8px;
-      border-left: 4px solid var(--accent);
-    }
+    .item-card { background: #0f172a; padding: 10px; border-radius: 6px; margin-bottom: 8px; border-left: 4px solid var(--accent); }
   </style>
 </head>
 <body>
 
-  <header>
-    <h1>YKS Akıllı Otonom Koç</h1>
-    <p class="subtitle">Kendi Kendine Ödevlendirme & Otomatik Hata Analiz Paneli</p>
-  </header>
+  <!-- ==================== 1. OTURUM AÇMA / KAYIT EKRANI ==================== -->
+  <div id="auth-screen">
+    <div class="auth-tabs">
+      <div class="auth-tab active" onclick="switchAuthTab('login')">Giriş Yap</div>
+      <div class="auth-tab" onclick="switchAuthTab('register')">Kayıt Ol</div>
+    </div>
 
-  <div class="grid-container">
+    <!-- Giriş Formu -->
+    <form id="login-form" onsubmit="handleLogin(event)">
+      <input type="text" id="login-username" placeholder="Kullanıcı Adı" required>
+      <input type="password" id="login-password" placeholder="Şifre" required>
+      <button type="submit">Sisteme Giriş Et</button>
+    </form>
+
+    <!-- Kayıt Formu -->
+    <form id="register-form" onsubmit="handleRegister(event)" style="display: none;">
+      <input type="text" id="reg-username" placeholder="Kullanıcı Adı Seç" required>
+      <input type="password" id="reg-password" placeholder="Şifre Oluştur" required>
+      <button type="submit">Hesap Oluştur</button>
+    </form>
+  </div>
+
+
+  <!-- ==================== 2. DASHBOARD EKRANI ==================== -->
+  <div id="dashboard-screen">
     
-    <!-- 1. MODÜL: VİDEO VE ÖDEV EKLEME -->
-    <div class="card">
-      <h2>1. Günlük Ödev & Video Entegre Et</h2>
-      <input type="text" id="taskTitle" placeholder="Ders / Konu Adı (Örn: TYT Mat - Üslü Sayılar)">
-      <input type="text" id="ytUrl" placeholder="YouTube Video / Playlist Linki">
-      <button onclick="addAssignment()">Ödeve Ekle</button>
-
-      <ul id="assignmentList" class="item-list"></ul>
-    </div>
-
-    <!-- 2. MODÜL: AKILLI YANLIŞ HAVUZU -->
-    <div class="card">
-      <h2>2. Yanlış / Hata Girişi Yap</h2>
-      <select id="errSubject">
-        <option value="Matematik">Matematik</option>
-        <option value="Fizik">Fizik</option>
-        <option value="Kimya">Kimya</option>
-        <option value="Biyoloji">Biyoloji</option>
-        <option value="Türkçe">Türkçe</option>
-      </select>
-      <textarea id="errNote" rows="3" placeholder="Ne hatası yaptın? (Örn: 'Soru kökündeki olamaz lafını kaçırdım' veya 'Formülü hatırlayamadım')"></textarea>
-      <button onclick="processError()">Hatayı Analiz Et ve Kaydet</button>
-
-      <div id="errorAnalysisResult"></div>
-    </div>
-
-    <!-- 3. MODÜL: GENEL ANALİZ & RAPOR -->
-    <div class="card">
-      <h2>3. Otomatik Sınav/Hata Raporu</h2>
-      <p style="font-size:14px; color: var(--text-dim); margin-bottom:10px;">Girdiğin hatalara göre sistemin sana koyduğu teşhis:</p>
-      
-      <div id="reportStats">
-        <p>🔴 Bilgi Eksikliği: <strong id="cntBilgi">0</strong></p>
-        <p>🟡 Dikkat / Okuma Hatası: <strong id="cntDikkat">0</strong></p>
-        <p>🔵 Süre / Taktik Hatası: <strong id="cntSure">0</strong></p>
+    <nav>
+      <div>
+        <h1 style="color:var(--accent); font-size:20px;">YKS Otonom Koçluk Paneli</h1>
       </div>
+      <div class="user-info">
+        <span>Hoş geldin, <strong id="user-display-name" style="color:var(--success);">Öğrenci</strong></span>
+        <button onclick="handleLogout()" class="btn-danger">Çıkış Yap</button>
+      </div>
+    </nav>
+
+    <!-- Üst İstatistik ve Hedef Kartları -->
+    <div class="top-stats">
       
-      <hr style="border-color:#334155; margin: 15px 0;">
+      <!-- YKS Geri Sayım Kartı -->
+      <div class="stat-card">
+        <span style="color: var(--text-dim); font-size: 13px;">⏱️ YKS Kalan Zaman</span>
+        <div class="countdown-timer" id="yks-countdown">Yükleniyor...</div>
+      </div>
+
+      <!-- Hedef Kartı -->
+      <div class="stat-card">
+        <span style="color: var(--text-dim); font-size: 13px;">🎯 Hedef / Rota</span>
+        <div id="target-display" style="margin-top:8px;">
+          <h3 id="disp-target-university" style="font-size:16px;">Henüz Hedef Girilmedi</h3>
+          <p id="disp-target-rank" style="font-size:13px; color:var(--text-dim);">Hedef Sıralama: -</p>
+        </div>
+        <button onclick="toggleTargetForm()" style="margin-top:10px; background:#334155; font-size:12px; padding:5px;">Hedefi Güncelle</button>
+        
+        <!-- Hedef Güncelleme Formu (Gizli) -->
+        <div id="target-form" style="display:none; margin-top:10px;">
+          <input type="text" id="input-uni" placeholder="Örn: İTÜ Bilgisayar Müh.">
+          <input type="text" id="input-rank" placeholder="Örn: İlk 5.000">
+          <button onclick="saveTarget()">Kaydet</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Uygulama Modülleri Grid -->
+    <div class="grid-container">
       
-      <h3>Son Eklenen Hatalar:</h3>
-      <ul id="errorList" class="item-list"></ul>
+      <!-- 1. MODÜL: VİDEO VE ÖDEV EKLEME -->
+      <div class="card">
+        <h2>1. Günlük Ödev & Video Entegre Et</h2>
+        <input type="text" id="taskTitle" placeholder="Ders / Konu Adı (Örn: TYT Mat - Üslü Sayılar)">
+        <input type="text" id="ytUrl" placeholder="YouTube Video / Playlist Linki">
+        <button onclick="addAssignment()">Ödeve Ekle</button>
+
+        <ul id="assignmentList" class="item-list"></ul>
+      </div>
+
+      <!-- 2. MODÜL: AKILLI YANLIŞ HAVUZU -->
+      <div class="card">
+        <h2>2. Yanlış / Hata Girişi Yap</h2>
+        <select id="errSubject">
+          <option value="Matematik">Matematik</option>
+          <option value="Fizik">Fizik</option>
+          <option value="Kimya">Kimya</option>
+          <option value="Biyoloji">Biyoloji</option>
+          <option value="Türkçe">Türkçe</option>
+        </select>
+        <textarea id="errNote" rows="3" placeholder="Ne hatası yaptın? (Örn: 'Soru kökündeki olamaz lafını kaçırdım' veya 'Formülü hatırlayamadım')"></textarea>
+        <button onclick="processError()">Hatayı Analiz Et ve Kaydet</button>
+      </div>
+
+      <!-- 3. MODÜL: GENEL ANALİZ & RAPOR -->
+      <div class="card">
+        <h2>3. Otomatik Hata Raporu</h2>
+        <div id="reportStats">
+          <p>🔴 Bilgi Eksikliği: <strong id="cntBilgi">0</strong></p>
+          <p>🟡 Dikkat / Okuma Hatası: <strong id="cntDikkat">0</strong></p>
+          <p>🔵 Süre / Taktik Hatası: <strong id="cntSure">0</strong></p>
+        </div>
+        <hr style="border-color:#334155; margin: 15px 0;">
+        <h3>Son Eklenen Hatalar:</h3>
+        <ul id="errorList" class="item-list"></ul>
+      </div>
+
     </div>
 
   </div>
 
   <script>
-    // Buraya birazdan JS mantığını yazacağız
+    // --- GLOBAL DEĞİŞKENLER ---
+    let currentUser = null;
+    let stats = { bilgi: 0, dikkat: 0, sure: 0 };
+
+    // --- OTURUM MANTIĞI (AUTH) ---
+    function switchAuthTab(type) {
+      document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+      if(type === 'login') {
+        document.querySelectorAll('.auth-tab')[0].classList.add('active');
+        document.getElementById('login-form').style.display = 'block';
+        document.getElementById('register-form').style.display = 'none';
+      } else {
+        document.querySelectorAll('.auth-tab')[1].classList.add('active');
+        document.getElementById('login-form').style.display = 'none';
+        document.getElementById('register-form').style.display = 'block';
+      }
+    }
+
+    function handleRegister(e) {
+      e.preventDefault();
+      const user = document.getElementById('reg-username').value;
+      const pass = document.getElementById('reg-password').value;
+
+      if(localStorage.getItem('user_' + user)) {
+        alert("Bu kullanıcı adı zaten alınmış!");
+        return;
+      }
+
+      const userData = { password: pass, targetUni: "", targetRank: "", stats: { bilgi: 0, dikkat: 0, sure: 0 } };
+      localStorage.setItem('user_' + user, JSON.stringify(userData));
+      alert("Kayıt başarılı! Şimdi giriş yapabilirsiniz.");
+      switchAuthTab('login');
+    }
+
+    function handleLogin(e) {
+      e.preventDefault();
+      const user = document.getElementById('login-username').value;
+      const pass = document.getElementById('login-password').value;
+
+      const storedUser = localStorage.getItem('user_' + user);
+      if(!storedUser) {
+        alert("Kullanıcı bulunamadı!");
+        return;
+      }
+
+      const userData = JSON.parse(storedUser);
+      if(userData.password !== pass) {
+        alert("Hatalı şifre!");
+        return;
+      }
+
+      // Oturumu Başlat
+      currentUser = user;
+      localStorage.setItem('active_session', user);
+      loadDashboard();
+    }
+
+    function handleLogout() {
+      localStorage.removeItem('active_session');
+      currentUser = null;
+      document.getElementById('dashboard-screen').style.display = 'none';
+      document.getElementById('auth-screen').style.display = 'block';
+    }
+
+    // Sayfa Yüklendiğinde Oturum Kontrolü
+    window.onload = function() {
+      const activeUser = localStorage.getItem('active_session');
+      if(activeUser && localStorage.getItem('user_' + activeUser)) {
+        currentUser = activeUser;
+        loadDashboard();
+      }
+      startCountdown();
+    };
+
+    function loadDashboard() {
+      document.getElementById('auth-screen').style.display = 'none';
+      document.getElementById('dashboard-screen').style.display = 'block';
+      document.getElementById('user-display-name').innerText = currentUser;
+
+      // Hedef Verilerini Yükle
+      const userData = JSON.parse(localStorage.getItem('user_' + currentUser));
+      if(userData.targetUni) {
+        document.getElementById('disp-target-university').innerText = userData.targetUni;
+        document.getElementById('disp-target-rank').innerText = "Hedef Sıralama: " + userData.targetRank;
+      }
+    }
+
+    // --- HEDEF BELİRLEME MANTIĞI ---
+    function toggleTargetForm() {
+      const form = document.getElementById('target-form');
+      form.style.display = form.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function saveTarget() {
+      const uni = document.getElementById('input-uni').value;
+      const rank = document.getElementById('input-rank').value;
+
+      if(!uni || !rank) return alert("Lütfen tüm alanları doldurun!");
+
+      const userData = JSON.parse(localStorage.getItem('user_' + currentUser));
+      userData.targetUni = uni;
+      userData.targetRank = rank;
+
+      localStorage.setItem('user_' + currentUser, JSON.stringify(userData));
+
+      document.getElementById('disp-target-university').innerText = uni;
+      document.getElementById('disp-target-rank').innerText = "Hedef Sıralama: " + rank;
+      toggleTargetForm();
+    }
+
+    // --- YKS GERİ SAYIM SAYACI ---
+    function startCountdown() {
+      // Örnek Yaklaşık YKS Tarihi (Haziran Ortası)
+      const yksDate = new Date("June 20, 2027 10:15:00").getTime();
+
+      setInterval(function() {
+        const now = new Date().getTime();
+        const distance = yksDate - now;
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+
+        document.getElementById("yks-countdown").innerHTML = `${days} Gün ${hours} Sa ${minutes} Dk`;
+      }, 1000);
+    }
+
+    // --- ÖDEV & VİDEO EKLEME ---
+    function addAssignment() {
+      const title = document.getElementById('taskTitle').value;
+      const url = document.getElementById('ytUrl').value;
+      if(!title) return alert("Lütfen konu gir!");
+
+      let embedHtml = "";
+      if(url.includes("watch?v=")) {
+        const videoId = url.split("v=")[1].split("&")[0];
+        embedHtml = `<iframe width="100%" height="160" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen style="margin-top:8px; border-radius:6px;"></iframe>`;
+      }
+
+      const list = document.getElementById('assignmentList');
+      const li = document.createElement('li');
+      li.className = 'item-card';
+      li.innerHTML = `
+        <strong>${title}</strong>
+        ${embedHtml}
+        <label style="display:block; margin-top:8px; font-size:13px;">
+          <input type="checkbox" style="width:auto;"> Tamamlandı
+        </label>
+      `;
+      list.appendChild(li);
+      document.getElementById('taskTitle').value = "";
+      document.getElementById('ytUrl').value = "";
+    }
+
+    // --- HATA DETEKTÖRÜ ---
+    function processError() {
+      const subject = document.getElementById('errSubject').value;
+      const note = document.getElementById('errNote').value.toLowerCase();
+      if(!note) return alert("Lütfen not yaz!");
+
+      let category = "";
+      let badgeClass = "";
+
+      const dikkatKelimeleri = ["unuttum", "kaçırdım", "yanlış okudum", "dikkat", "gözden", "işlem hatası"];
+      const sureKelimeleri = ["yetmedi", "yetişmedi", "süre", "zaman", "yavaş"];
+
+      if (dikkatKelimeleri.some(k => note.includes(k))) {
+        category = "Dikkat Hatası";
+        badgeClass = "badge-dikkat";
+        stats.dikkat++;
+      } else if (sureKelimeleri.some(k => note.includes(k))) {
+        category = "Süre Hatası";
+        badgeClass = "badge-sure";
+        stats.sure++;
+      } else {
+        category = "Bilgi Eksikliği";
+        badgeClass = "badge-bilgi";
+        stats.bilgi++;
+      }
+
+      document.getElementById('cntBilgi').innerText = stats.bilgi;
+      document.getElementById('cntDikkat').innerText = stats.dikkat;
+      document.getElementById('cntSure').innerText = stats.sure;
+
+      const errorList = document.getElementById('errorList');
+      const li = document.createElement('li');
+      li.className = 'item-card';
+      li.innerHTML = `
+        <small style="color:var(--text-dim);">${subject}</small>
+        <p style="font-size:14px; margin: 4px 0;">"${document.getElementById('errNote').value}"</p>
+        <span class="badge ${badgeClass}">${category}</span>
+      `;
+      errorList.prepend(li);
+      document.getElementById('errNote').value = "";
+    }
   </script>
 </body>
 </html>
