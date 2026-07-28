@@ -5,8 +5,37 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>YKS Akıllı Otonom Koç & Dashboard</title>
   <style>
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --accent: #6366f1;
+      --accent-hover: #4f46e5;
+      --text: #f8fafc;
+      --text-dim: #94a3b8;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --info: #3b82f6;
+      --success: #10b981;
+    }
 
-    /* HAMBURGER MENÜ & SIDEBAR STİLLERİ */
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+    body { background-color: var(--bg); color: var(--text); padding: 20px; min-height: 100vh; }
+
+    /* GİRİŞ / KAYIT EKRANI */
+    #auth-screen {
+      max-width: 400px;
+      margin: 80px auto;
+      background: var(--card);
+      padding: 30px;
+      border-radius: 12px;
+      border: 1px solid #334155;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    }
+    .auth-tabs { display: flex; margin-bottom: 20px; border-bottom: 1px solid #334155; }
+    .auth-tab { flex: 1; padding: 10px; text-align: center; cursor: pointer; color: var(--text-dim); }
+    .auth-tab.active { color: var(--accent); border-bottom: 2px solid var(--accent); font-weight: bold; }
+
+        /* HAMBURGER MENÜ & SIDEBAR STİLLERİ */
 .menu-btn {
   background: transparent;
   border: none;
@@ -88,36 +117,6 @@
 .overlay.active {
   display: block;
 }
-    :root {
-      --bg: #0f172a;
-      --card: #1e293b;
-      --accent: #6366f1;
-      --accent-hover: #4f46e5;
-      --text: #f8fafc;
-      --text-dim: #94a3b8;
-      --danger: #ef4444;
-      --warning: #f59e0b;
-      --info: #3b82f6;
-      --success: #10b981;
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
-    body { background-color: var(--bg); color: var(--text); padding: 20px; min-height: 100vh; }
-
-    /* GİRİŞ / KAYIT EKRANI */
-    #auth-screen {
-      max-width: 400px;
-      margin: 80px auto;
-      background: var(--card);
-      padding: 30px;
-      border-radius: 12px;
-      border: 1px solid #334155;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-    }
-    .auth-tabs { display: flex; margin-bottom: 20px; border-bottom: 1px solid #334155; }
-    .auth-tab { flex: 1; padding: 10px; text-align: center; cursor: pointer; color: var(--text-dim); }
-    .auth-tab.active { color: var(--accent); border-bottom: 2px solid var(--accent); font-weight: bold; }
-
     /* DASHBOARD EKRANI */
     #dashboard-screen { display: none; }
     
