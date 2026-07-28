@@ -35,6 +35,16 @@
     .auth-tab { flex: 1; padding: 10px; text-align: center; cursor: pointer; color: var(--text-dim); }
     .auth-tab.active { color: var(--accent); border-bottom: 2px solid var(--accent); font-weight: bold; }
 
+    <nav>
+  <div style="display: flex; align-items: center; gap: 15px;">
+    <!-- 3 Çizgi Hamburger Butonu -->
+    <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+    <h1 style="color:var(--accent); font-size:20px;">YKS Otonom Koçluk Paneli</h1>
+  </div>
+  <div class="user-info">
+    <span>Hoş geldin, <strong id="user-display-name" style="color:var(--success);">Öğrenci</strong></span>
+  </div>
+</nav>
         /* HAMBURGER MENÜ & SIDEBAR STİLLERİ */
 .menu-btn {
   background: transparent;
@@ -309,6 +319,14 @@
   </div>
 
   <script>
+
+    function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('overlay');
+  
+  sidebar.classList.toggle('active');
+  overlay.classList.toggle('active');
+}
     // --- GLOBAL DEĞİŞKENLER ---
     let currentUser = null;
     let stats = { bilgi: 0, dikkat: 0, sure: 0 };
@@ -505,6 +523,7 @@
       document.getElementById('errNote').value = "";
     }
   </script>
+  
 </body>
   <!-- Karartma Ekranı -->
 <div id="overlay" class="overlay" onclick="toggleSidebar()"></div>
