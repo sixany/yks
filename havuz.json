@@ -1,0 +1,30 @@
+{
+  "hataKategorileri": [
+    { "id": "bilgi", "etiket": "Bilgi Eksikliği", "renk": "#ef4444" },
+    { "id": "dikkat", "etiket": "Dikkat / Okuma Hatası", "renk": "#ffb74d" },
+    { "id": "sure", "etiket": "Süre / Taktik Hatası", "renk": "#3b82f6" }
+  ],
+
+  "hataAnahtarKelimeleri": {
+    "dikkat": ["yanlış okudum", "soruyu anlamadım", "işlem hatası", "eksiği görmedim", "dikkat"],
+    "sure": ["süre yetmedi", "yetistiremedim", "zaman kaybettim", "geç kaldım", "yetişmedi"],
+    "bilgi": ["formülü unuttum", "konuyu bilmiyorum", "hatırlamadım", "hiç görmedim", "bilgi"]
+  },
+
+  "flashcards": [
+    { "q": "Hangi organel hücre içi sindirimden sorumludur?", "a": "Lizozom" },
+    { "q": "İntegralin geometrik anlamı nedir?", "a": "Eğri altında kalan alandır." },
+    { "q": "İdeal gaz denklemindeki 'R' nedir?", "a": "Evrensel Gaz Sabiti (0,082 veya 22,4/273)" },
+    { "q": "Simyayı kimyadan ayıran en önemli unsur nedir?", "a": "Sistematik bilgi birikimi ve deney/tartı kullanımı" },
+    { "q": "Bitki hücrelerinde hücre duvarı hangi maddeden oluşur?", "a": "Selüloz" },
+    { "q": "Türevde f'(x) = 0 yapan noktalar neyi ifade eder?", "a": "Yerel ekstremum (maksimum veya minimum) noktalarını" },
+    { "q": "Fizikte iş yapılabilmesi için şart nedir?", "a": "Kuvvet uygulanmalı ve cisim kuvvet doğrultusunda yer değiştirmeli (W = F · Δx)" },
+    { "q": "Esterleşme tepkimesi hangi organik bileşikler arasında gerçekleşir?", "a": "Karboksilli Asit + Alkol" },
+    { "q": "Mitoz bölünmede kardeş kromatitlerin ayrıldığı evre hangisidir?", "a": "Anafaz" },
+    { "q": "Açısal momentumun korunması için dış torkun değeri kaç olmalıdır?", "a": "Sıfır (τ = 0)" },
+    { "q": "LOG(A·B) ifadesi neye eşittir?", "a": "log(A) + log(B)" },
+    { "q": "Periyodik cetvelde soldan sağa gidildikçe elektronegatiflik nasıl değişir?", "a": "Genellikle artar." }
+  ],
+
+  "dersListesi": ["Matematik", "Fizik", "Kimya", "Biyoloji", "Türkçe", "Tarih", "Coğrafya"]
+}
