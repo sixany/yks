@@ -21,7 +21,7 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
     body { background-color: var(--bg); color: var(--text); padding: 20px; min-height: 100vh; }
 
-    /* GİRİŞ / KAYIT EKRANI */
+    /* ================= GİRİŞ / KAYIT EKRANI ================= */
     #auth-screen {
       max-width: 400px;
       margin: 80px auto;
@@ -35,99 +35,7 @@
     .auth-tab { flex: 1; padding: 10px; text-align: center; cursor: pointer; color: var(--text-dim); }
     .auth-tab.active { color: var(--accent); border-bottom: 2px solid var(--accent); font-weight: bold; }
 
-    <nav>
-  <div style="display: flex; align-items: center; gap: 15px;">
-    <!-- 3 Çizgi Hamburger Butonu -->
-    <button class="menu-btn" onclick="toggleSidebar()">☰</button>
-    <h1 style="color:var(--accent); font-size:20px;">YKS Otonom Koçluk Paneli</h1>
-  </div>
-  <div class="user-info">
-    <span>Hoş geldin, <strong id="user-display-name" style="color:var(--success);">Öğrenci</strong></span>
-  </div>
-</nav>
-        /* HAMBURGER MENÜ & SIDEBAR STİLLERİ */
-.menu-btn {
-  background: transparent;
-  border: none;
-  color: var(--text);
-  font-size: 24px;
-  cursor: pointer;
-  width: auto;
-  padding: 5px 10px;
-  margin-bottom: 0;
-}
-
-.sidebar {
-  position: fixed;
-  top: 0;
-  left: -280px; /* Başlangıçta gizli */
-  width: 280px;
-  height: 100%;
-  background-color: var(--card);
-  border-right: 1px solid #334155;
-  box-shadow: 5px 0 15px rgba(0,0,0,0.5);
-  transition: left 0.3s ease;
-  z-index: 1000;
-  padding: 20px;
-}
-
-.sidebar.active {
-  left: 0; /* Menü açıldığında */
-}
-
-.sidebar-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid #334155;
-  padding-bottom: 15px;
-  margin-bottom: 20px;
-}
-
-.close-btn {
-  background: transparent;
-  border: none;
-  color: var(--text-dim);
-  font-size: 20px;
-  cursor: pointer;
-  width: auto;
-}
-
-.sidebar-menu {
-  list-style: none;
-}
-
-.sidebar-menu li a {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 12px 15px;
-  color: var(--text);
-  text-decoration: none;
-  border-radius: 6px;
-  transition: background 0.2s;
-}
-
-.sidebar-menu li a:hover {
-  background-color: #0f172a;
-  color: var(--accent);
-}
-
-/* Karartma Arka Planı (Overlay) */
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.5);
-  display: none;
-  z-index: 999;
-}
-.overlay.active {
-  display: block;
-}
-    /* DASHBOARD EKRANI */
+    /* ================= DASHBOARD EKRANI ================= */
     #dashboard-screen { display: none; }
     
     nav {
@@ -139,6 +47,82 @@
       margin-bottom: 25px;
     }
     .user-info { display: flex; align-items: center; gap: 15px; }
+
+    /* HAMBURGER MENÜ & SIDEBAR STİLLERİ */
+    .menu-btn {
+      background: transparent;
+      border: none;
+      color: var(--text);
+      font-size: 24px;
+      cursor: pointer;
+      width: auto;
+      padding: 5px 10px;
+      margin-bottom: 0;
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: -280px;
+      width: 280px;
+      height: 100%;
+      background-color: var(--card);
+      border-right: 1px solid #334155;
+      box-shadow: 5px 0 15px rgba(0,0,0,0.5);
+      transition: left 0.3s ease;
+      z-index: 1000;
+      padding: 20px;
+    }
+
+    .sidebar.active { left: 0; }
+
+    .sidebar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #334155;
+      padding-bottom: 15px;
+      margin-bottom: 20px;
+    }
+
+    .close-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-dim);
+      font-size: 20px;
+      cursor: pointer;
+      width: auto;
+    }
+
+    .sidebar-menu { list-style: none; }
+
+    .sidebar-menu li a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 15px;
+      color: var(--text);
+      text-decoration: none;
+      border-radius: 6px;
+      transition: background 0.2s;
+    }
+
+    .sidebar-menu li a:hover {
+      background-color: #0f172a;
+      color: var(--accent);
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      z-index: 999;
+    }
+    .overlay.active { display: block; }
 
     /* GERİ SAYIM & HEDEF KARTLARI */
     .top-stats {
@@ -210,6 +194,23 @@
 </head>
 <body>
 
+  <!-- Karartma Ekranı (Overlay) -->
+  <div id="overlay" class="overlay" onclick="toggleSidebar()"></div>
+
+  <!-- Yan Menü (Sidebar) -->
+  <div id="sidebar" class="sidebar">
+    <div class="sidebar-header">
+      <h3 style="color:var(--accent);">Menü</h3>
+      <button class="close-btn" onclick="toggleSidebar()">&times;</button>
+    </div>
+    <ul class="sidebar-menu">
+      <li><a href="#" onclick="toggleSidebar()">🏠 Ana Sayfa</a></li>
+      <li><a href="#" onclick="alert('Ayarlar yakında eklenecek!'); toggleSidebar();">⚙️ Ayarlar</a></li>
+      <hr style="border-color:#334155; margin: 10px 0;">
+      <li><a href="#" onclick="handleLogout()" style="color:var(--danger);">🚪 Çıkış Yap</a></li>
+    </ul>
+  </div>
+
   <!-- ==================== 1. OTURUM AÇMA / KAYIT EKRANI ==================== -->
   <div id="auth-screen">
     <div class="auth-tabs">
@@ -232,17 +233,16 @@
     </form>
   </div>
 
-
   <!-- ==================== 2. DASHBOARD EKRANI ==================== -->
   <div id="dashboard-screen">
     
     <nav>
-      <div>
+      <div style="display: flex; align-items: center; gap: 15px;">
+        <button class="menu-btn" onclick="toggleSidebar()">☰</button>
         <h1 style="color:var(--accent); font-size:20px;">YKS Otonom Koçluk Paneli</h1>
       </div>
       <div class="user-info">
         <span>Hoş geldin, <strong id="user-display-name" style="color:var(--success);">Öğrenci</strong></span>
-        <button onclick="handleLogout()" class="btn-danger">Çıkış Yap</button>
       </div>
     </nav>
 
@@ -319,17 +319,17 @@
   </div>
 
   <script>
-
-    function toggleSidebar() {
-  const sidebar = document.getElementById('sidebar');
-  const overlay = document.getElementById('overlay');
-  
-  sidebar.classList.toggle('active');
-  overlay.classList.toggle('active');
-}
     // --- GLOBAL DEĞİŞKENLER ---
     let currentUser = null;
     let stats = { bilgi: 0, dikkat: 0, sure: 0 };
+
+    // --- SIDEBAR MANTIĞI ---
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('overlay');
+      sidebar.classList.toggle('active');
+      overlay.classList.toggle('active');
+    }
 
     // --- OTURUM MANTIĞI (AUTH) ---
     function switchAuthTab(type) {
@@ -378,7 +378,6 @@
         return;
       }
 
-      // Oturumu Başlat
       currentUser = user;
       localStorage.setItem('active_session', user);
       loadDashboard();
@@ -387,11 +386,12 @@
     function handleLogout() {
       localStorage.removeItem('active_session');
       currentUser = null;
+      document.getElementById('sidebar').classList.remove('active');
+      document.getElementById('overlay').classList.remove('active');
       document.getElementById('dashboard-screen').style.display = 'none';
       document.getElementById('auth-screen').style.display = 'block';
     }
 
-    // Sayfa Yüklendiğinde Oturum Kontrolü
     window.onload = function() {
       const activeUser = localStorage.getItem('active_session');
       if(activeUser && localStorage.getItem('user_' + activeUser)) {
@@ -406,7 +406,6 @@
       document.getElementById('dashboard-screen').style.display = 'block';
       document.getElementById('user-display-name').innerText = currentUser;
 
-      // Hedef Verilerini Yükle
       const userData = JSON.parse(localStorage.getItem('user_' + currentUser));
       if(userData.targetUni) {
         document.getElementById('disp-target-university').innerText = userData.targetUni;
@@ -414,7 +413,7 @@
       }
     }
 
-    // --- HEDEF BELİRLEME MANTIĞI ---
+    // --- HEDEF MANTIĞI ---
     function toggleTargetForm() {
       const form = document.getElementById('target-form');
       form.style.display = form.style.display === 'none' ? 'block' : 'none';
@@ -439,7 +438,6 @@
 
     // --- YKS GERİ SAYIM SAYACI ---
     function startCountdown() {
-      // Örnek Yaklaşık YKS Tarihi (Haziran Ortası)
       const yksDate = new Date("June 20, 2027 10:15:00").getTime();
 
       setInterval(function() {
@@ -523,22 +521,5 @@
       document.getElementById('errNote').value = "";
     }
   </script>
-  
 </body>
-  <!-- Karartma Ekranı -->
-<div id="overlay" class="overlay" onclick="toggleSidebar()"></div>
-
-<!-- Yan Menü (Sidebar) -->
-<div id="sidebar" class="sidebar">
-  <div class="sidebar-header">
-    <h3 style="color:var(--accent);">Menü</h3>
-    <button class="close-btn" onclick="toggleSidebar()">&times;</button>
-  </div>
-  <ul class="sidebar-menu">
-    <li><a href="#" onclick="toggleSidebar()">🏠 Ana Sayfa</a></li>
-    <li><a href="#" onclick="alert('Ayarlar yakında eklenecek!'); toggleSidebar();">⚙️ Ayarlar</a></li>
-    <hr style="border-color:#334155; margin: 10px 0;">
-    <li><a href="#" onclick="handleLogout()" style="color:var(--danger);">🚪 Çıkış Yap</a></li>
-  </ul>
-</div>
 </html>
