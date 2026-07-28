@@ -4,10 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PerforXYZs - YKS Akıllı Koçluk & Çalışma Platformu</title>
-  <!-- Grafik Çizimi İçin Chart.js Kütüphanesi -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    /* ================= ÖSYM GERÇEK TEMA RENKLERİ ================= */
     :root[data-theme="dark"] {
       --bg: #121212;
       --card-bg: #1e1e1e;
@@ -41,7 +39,6 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; transition: background-color 0.3s, color 0.3s, border-color 0.3s; }
     body { background-color: var(--bg); color: var(--text); padding: 20px; min-height: 100vh; overflow-x: hidden; }
 
-    /* ================= GİRİŞ / KAYIT EKRANI ================= */
     #auth-screen {
       max-width: 420px;
       margin: 80px auto;
@@ -56,7 +53,6 @@
     .auth-tab { flex: 1; padding: 12px; text-align: center; cursor: pointer; color: var(--text-dim); font-weight: 600; }
     .auth-tab.active { color: var(--osym-orange); border-bottom: 3px solid var(--osym-orange); }
 
-    /* ================= DASHBOARD EKRANI ================= */
     #dashboard-screen { display: none; max-width: 1200px; margin: 0 auto; }
     
     nav {
@@ -102,7 +98,6 @@
       transition: none;
     }
 
-    /* SIDEBAR (YAN MENÜ) ================= */
     .sidebar {
       position: fixed;
       top: 0;
@@ -153,7 +148,6 @@
     .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(3px); display: none; z-index: 999; }
     .overlay.active { display: block; }
 
-    /* ================= 3D TILT HOVER KARTLARI ================= */
     .tilt-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
@@ -194,7 +188,6 @@
     .timer-info span { font-size: 13px; color: var(--text-dim); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
     .timer-info h2 { font-size: 32px; color: var(--osym-orange); margin-top: 5px; font-weight: 800; }
 
-    /* MOTİVASYON BARI VE SERİ */
     .quote-box {
       background: var(--card-bg);
       border-left: 4px solid var(--osym-orange);
@@ -218,7 +211,6 @@
       white-space: nowrap;
     }
 
-    /* İLERLEME BARI */
     .progress-container {
       margin-top: 15px;
       background: var(--bg);
@@ -243,7 +235,6 @@
       gap: 25px;
     }
 
-    /* FLASHCARD (BİLGİ KARTI) STİLİ */
     .flashcard {
       background: var(--bg);
       border: 1px solid var(--card-border);
@@ -262,7 +253,6 @@
     }
     .flashcard:active { transform: scale(0.98); }
 
-    /* CHAT STİLLERİ ================= */
     .chat-box {
       height: 380px;
       overflow-y: auto;
@@ -281,12 +271,10 @@
     .chat-user { font-size: 11px; font-weight: 700; opacity: 0.8; margin-bottom: 3px; display: block; }
     .chat-time { font-size: 10px; opacity: 0.6; float: right; margin-left: 8px; margin-top: 4px; }
 
-    /* TABLOLAR */
     table { width: 100%; border-collapse: collapse; margin-top: 10px; }
     th, td { padding: 12px; text-align: left; border-bottom: 1px solid var(--card-border); font-size: 14px; }
     th { color: var(--osym-orange); font-weight: 700; }
 
-    /* FORM ELEMANLARI */
     input, textarea, select, button {
       width: 100%;
       padding: 12px 16px;
@@ -311,11 +299,7 @@
     button:hover { background-color: var(--osym-orange-hover); transform: translateY(-2px); }
 
     .item-list { list-style: none; margin-top: 15px; }
-    .item-card { background: var(--bg); padding: 14px; border-radius: 10px; margin-bottom: 10px; border-left: 4px solid var(--osym-orange); }
-    .badge { display: inline-block; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; margin-top: 6px; }
-    .badge-dikkat { background: var(--warning); color: #000; }
-    .badge-bilgi { background: var(--danger); color: #fff; }
-    .badge-sure { background: var(--osym-gray); color: #fff; }
+    .item-card { background: var(--bg); padding: 14px; border-radius: 10px; margin-bottom: 10px; border-left: 4px solid var(--osym-orange); display: flex; justify-content: space-between; align-items: center; }
   </style>
 </head>
 <body>
@@ -330,6 +314,8 @@
     </div>
     <ul class="sidebar-menu">
       <li><a href="#" onclick="showSection('home')">🏠 Ana Sayfa</a></li>
+      <li><a href="#" onclick="showSection('tasks')">📝 Görev & Ödev Yönetimi</a></li>
+      <li><a href="#" onclick="showSection('errors')">⚠️ Hata / Yanlış Analizi</a></li>
       <li><a href="#" onclick="showSection('pomodoro')">⏱️ Pomodoro Odaklanma</a></li>
       <li><a href="#" onclick="showSection('net-tracking')">📊 Net Takibi & Grafikler</a></li>
       <li><a href="#" onclick="showSection('flashcards')">🃏 Bilgi Kartları (Flashcards)</a></li>
@@ -337,7 +323,7 @@
       <li><a href="#" onclick="showSection('topics')">📌 Çıkmış Soru Konu Dağılımı</a></li>
       <li><a href="#" onclick="showSection('leaderboard')">🏆 Topluluk Sıralaması</a></li>
       <li><a href="#" onclick="showSection('chat')">💬 Evrensel Chat</a></li>
-      <li><a href="#" onclick="showSection('settings')">⚙️ Ayarlar & Yedekleme</a></li>
+      <li><a href="#" onclick="showSection('settings')">⚙️ Ayarlar & Havuz / Yedekleme</a></li>
       <hr style="border-color:var(--card-border); margin: 15px 0;">
       <li><a href="#" onclick="handleLogout()" style="color:var(--danger);">🚪 Çıkış Yap</a></li>
     </ul>
@@ -376,7 +362,6 @@
       <button class="theme-toggle" onclick="toggleTheme()" id="theme-btn">☀️</button>
     </nav>
 
-    <!-- GÜNÜN MOTİVASYON SÖZÜ & STREAK -->
     <div class="quote-box">
       <span>💬 <strong id="quote-text">"Başarı, her gün tekrarlanan küçük çabaların toplamıdır."</strong></span>
       <span class="streak-badge" id="streak-counter">🔥 1 Günlük Seri</span>
@@ -402,7 +387,6 @@
         </div>
       </div>
 
-      <!-- GUNLUK SORU METRESİ -->
       <div class="tilt-card full-width-card">
         <div style="display: flex; justify-content: space-between; align-items: center;">
           <h2>🎯 Günlük Soru Çözüm Hedefi</h2>
@@ -417,30 +401,37 @@
         </div>
       </div>
 
-      <!-- ÖDEVLER PANELİ -->
       <div class="tilt-card full-width-card">
-        <h2>Ödevler & Video Dersler</h2>
+        <h2>📋 Bugünkü Görevlerin</h2>
+        <ul id="homeAssignmentList" class="item-list"></ul>
+      </div>
+    </div>
+
+    <!-- GÖREV VE ÖDEV YÖNETİMİ -->
+    <div id="section-tasks" style="display: none;">
+      <div class="tilt-card full-width-card">
+        <h2>📝 Görev & Video Ödevi Ekle</h2>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px;">
           <input type="text" id="taskTitle" placeholder="Ders / Konu Adı">
-          <input type="text" id="ytUrl" placeholder="YouTube Video Linki">
+          <input type="text" id="ytUrl" placeholder="YouTube Video Linki (Opsiyonel)">
           <button onclick="addAssignment()" style="height: 45px;">Ödeve Ekle</button>
         </div>
+        <hr style="border-color:var(--card-border); margin: 20px 0;">
+        <h3>Tüm Görevler Listesi</h3>
         <ul id="assignmentList" class="item-list"></ul>
       </div>
+    </div>
 
-      <!-- YANLIŞ HAVUZU & RAPOR -->
+    <!-- HATA VE YANLIŞ ANALİZİ -->
+    <div id="section-errors" style="display: none;">
       <div class="bottom-grid">
         <div class="tilt-card full-width-card" style="margin-bottom:0;">
-          <h2 style="font-size:18px;">Yanlış / Hata Girişi Yap</h2>
-          <select id="errSubject">
-            <option value="Matematik">Matematik</option>
-            <option value="Fizik">Fizik</option>
-            <option value="Kimya">Kimya</option>
-            <option value="Biyoloji">Biyoloji</option>
-            <option value="Türkçe">Türkçe</option>
-          </select>
-          <textarea id="errNote" rows="3" placeholder="Ne hatası yaptın?"></textarea>
-          <button onclick="processError()">Hatayı Analiz Et</button>
+          <h2 style="font-size:18px;">Hata / Yanlış Kaydı Oluştur</h2>
+          <p style="font-size:12px; color:var(--text-dim); margin-bottom:12px;">
+            Tür otomatik olarak havuzdaki anahtar kelimelere göre belirlenir.
+          </p>
+          <textarea id="errNote" rows="3" placeholder="Soru hakkındaki notun/yaptığın hata nedir?"></textarea>
+          <button onclick="processError()">Hatayı Kaydet</button>
         </div>
 
         <div class="tilt-card full-width-card" style="margin-bottom:0;">
@@ -451,13 +442,13 @@
             <p>🔵 Süre / Taktik Hatası: <strong id="cntSure">0</strong></p>
           </div>
           <hr style="border-color:var(--card-border); margin: 15px 0;">
-          <h3 style="font-size:14px; color:var(--text-dim);">Son Eklenen Hatalar:</h3>
+          <h3 style="font-size:14px; color:var(--text-dim);">Geçmiş Hata Kayıtları:</h3>
           <ul id="errorList" class="item-list"></ul>
         </div>
       </div>
     </div>
 
-    <!-- POMODORO ZAMANLAYICI -->
+    <!-- POMODORO -->
     <div id="section-pomodoro" style="display: none;">
       <div class="tilt-card full-width-card" style="max-width: 600px; margin: 0 auto; text-align: center;">
         <h2>⏱️ Pomodoro Odaklanma Zamanlayıcısı</h2>
@@ -496,7 +487,7 @@
       </div>
     </div>
 
-    <!-- FLASHCARDS (BİLGİ KARTLARI) -->
+    <!-- FLASHCARDS -->
     <div id="section-flashcards" style="display: none;">
       <div class="tilt-card full-width-card" style="max-width: 600px; margin: 0 auto; text-align: center;">
         <h2>🃏 YKS Pratik Bilgi Kartları</h2>
@@ -511,7 +502,7 @@
       </div>
     </div>
 
-    <!-- PUAN / SIRALAMA HESAPLAMA -->
+    <!-- PUAN HESAPLAMA -->
     <div id="section-calc" style="display: none;">
       <div class="tilt-card full-width-card" style="max-width: 600px; margin: 0 auto;">
         <h2>🧮 Tahmini TYT Puan Hesaplayıcı</h2>
@@ -547,7 +538,7 @@
       </div>
     </div>
 
-    <!-- TOPLULUK LİDERLİK TABLOSU -->
+    <!-- LİDERLİK TABLOSU -->
     <div id="section-leaderboard" style="display: none;">
       <div class="tilt-card full-width-card" style="max-width: 700px; margin: 0 auto;">
         <h2>🏆 Haftanın En Çok Çalışan Adayları</h2>
@@ -565,7 +556,7 @@
       </div>
     </div>
 
-    <!-- EVRENSEL CHAT SAYFASI -->
+    <!-- CHAT SAYFASI -->
     <div id="section-chat" style="display: none;">
       <div class="tilt-card full-width-card" style="max-width: 800px; margin: 0 auto;">
         <h2>💬 Evrensel YKS Sohbet Odası</h2>
@@ -577,7 +568,7 @@
       </div>
     </div>
 
-    <!-- AYARLAR VE YEDEKLEME -->
+    <!-- AYARLAR & DOSYA İÇE/DIŞA AKTARMA VE HAVUZ -->
     <div id="section-settings" style="display: none;">
       <div class="tilt-card full-width-card" style="max-width: 600px; margin: 0 auto;">
         <h2>⚙️ Profil ve Ayarlar</h2>
@@ -592,10 +583,17 @@
         <button onclick="saveProfileSettings()">Kaydet</button>
 
         <hr style="border-color:var(--card-border); margin: 20px 0;">
-        <h3>💾 Veri Yedekleme</h3>
-        <p style="font-size:12px; color:var(--text-dim); margin-bottom:10px;">Hatalarını ve verilerini dışa aktarabilir ya da yedekten yükleyebilirsin.</p>
-        <div style="display: flex; gap: 10px;">
-          <button onclick="exportData()" style="background-color: var(--success);">Verileri İndir (JSON)</button>
+        
+        <h3>📂 Dosya Tabanlı Veri Havuzu & Yedekleme</h3>
+        <p style="font-size:12px; color:var(--text-dim); margin-bottom:15px;">
+          Verilerini bilgisayarına <b>.json veya .txt</b> dosyası olarak kaydedebilir veya hazır bir görev/hata havuzunu içeri aktarabilirsin.
+        </p>
+
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <button onclick="exportData()" style="background-color: var(--success);">📥 Verileri / Havuzu Dosyaya İndir (.json)</button>
+          
+          <label style="font-size:13px; font-weight:600; margin-top:5px;">📤 Dış Dosyadan Veri / Havuz Yükle (.json / .txt):</label>
+          <input type="file" id="import-file-input" accept=".json, .txt" onchange="importDataFromFile(event)">
         </div>
       </div>
     </div>
@@ -608,7 +606,6 @@
     let solvedQuestions = 0;
     const defaultAvatar = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
 
-    // MOTİVASYON SÖZLERİ DİZİSİ
     const quotes = [
       "\"Başarı, her gün tekrarlanan küçük çabaların toplamıdır.\"",
       "\"Gelecek, bugün ne yaptığına bağlıdır.\"",
@@ -616,24 +613,29 @@
       "\"Hedefe ulaşmak için önce yola çıkmak gerekir.\""
     ];
 
-    // FLASHCARDS DİZİSİ
-    const cardsData = [
-      { q: "Hangi organel hücre içi sindirimden sorumludur?", a: "Lizozom" },
-      { q: "İntegralin geometrik anlamı nedir?", a: "Eğri altında kalan alandır." },
-      { q: "İdeal gaz denklemindeki 'R' nedir?", a: "Evrensel Gaz Sabiti" },
-      { q: "Simyayı kimyadan ayıran en önemli unsur nedir?", a: "Sistematik bilgi birikimi ve deney/tartı kullanımı" }
-    ];
+    const fallbackPoolData = {
+      hataAnahtarKelimeleri: {
+        dikkat: ["yanlış okudum", "soruyu anlamadım", "işlem hatası", "eksiği görmedim", "dikkat"],
+        sure: ["süre yetmedi", "yetistiremedim", "zaman kaybettim", "geç kaldım", "yetişmedi"],
+        bilgi: ["formülü unuttum", "konuyu bilmiyorum", "hatırlamadım", "hiç görmedim", "bilgi"]
+      },
+      flashcards: [
+        { q: "Hangi organel hücre içi sindirimden sorumludur?", a: "Lizozom" },
+        { q: "İntegralin geometrik anlamı nedir?", a: "Eğri altında kalan alandır." },
+        { q: "İdeal gaz denklemindeki 'R' nedir?", a: "Evrensel Gaz Sabiti" },
+        { q: "Simyayı kimyadan ayıran en önemli unsur nedir?", a: "Sistematik bilgi birikimi ve deney/tartı kullanımı" }
+      ]
+    };
+
+    let poolData = fallbackPoolData;
+    let cardsData = fallbackPoolData.flashcards;
     let currentCardIndex = 0;
     let showingAnswer = false;
 
-    // POMODORO DEĞİŞKENLERİ
     let pomoInterval;
     let pomoSeconds = 25 * 60;
-
-    // GRAFİK DEĞİŞKENİ
     let netChartInstance = null;
 
-    // MOUSE TILT EFEKTİ
     document.addEventListener('mousemove', (e) => {
       const cards = document.querySelectorAll('.tilt-card');
       cards.forEach(card => {
@@ -653,7 +655,27 @@
       });
     });
 
-    // TEMA İŞLEMLERİ
+    async function loadPoolData() {
+      try {
+        const response = await fetch('./havuz.json');
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+        const data = await response.json();
+        poolData = data || fallbackPoolData;
+        cardsData = Array.isArray(data?.flashcards) ? data.flashcards : fallbackPoolData.flashcards;
+        currentCardIndex = 0;
+
+        if (document.getElementById('section-flashcards').style.display !== 'none') {
+          renderFlashcard();
+        }
+      } catch (err) {
+        console.warn('havuz.json yüklenemedi, varsayılan veriler kullanılıyor.', err);
+        poolData = fallbackPoolData;
+        cardsData = fallbackPoolData.flashcards;
+        currentCardIndex = 0;
+      }
+    }
+
     function toggleTheme() {
       const html = document.documentElement;
       const newTheme = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
@@ -674,7 +696,7 @@
     }
 
     function showSection(sectionName) {
-      const sections = ['home', 'pomodoro', 'net-tracking', 'flashcards', 'calc', 'topics', 'leaderboard', 'chat', 'settings'];
+      const sections = ['home', 'tasks', 'errors', 'pomodoro', 'net-tracking', 'flashcards', 'calc', 'topics', 'leaderboard', 'chat', 'settings'];
       sections.forEach(s => {
         const el = document.getElementById('section-' + s);
         if(el) el.style.display = s === sectionName ? 'block' : 'none';
@@ -715,6 +737,8 @@
         avatar: defaultAvatar,
         targetFaculty: "Eczacılık",
         questions: 0,
+        tasks: [],
+        errors: [],
         nets: []
       };
 
@@ -748,6 +772,7 @@
 
     window.onload = function() {
       initTheme();
+      loadPoolData();
       const activeUser = localStorage.getItem('active_session');
       if(activeUser && localStorage.getItem('user_' + activeUser)) {
         currentUser = activeUser;
@@ -768,6 +793,9 @@
 
       solvedQuestions = userData.questions || 0;
       updateQuestionProgress();
+      renderTasks();
+      updateErrorStats();
+      renderErrorHistory();
 
       const avatarSrc = userData.avatar || defaultAvatar;
       document.getElementById('card-avatar').src = avatarSrc;
@@ -776,7 +804,6 @@
       document.getElementById('settings-faculty').value = userData.targetFaculty || "";
     }
 
-    // GÜNLÜK SORU EKLEME
     function addQuestions() {
       const input = document.getElementById('add-questions-input');
       const val = parseInt(input.value);
@@ -798,7 +825,127 @@
       document.getElementById('leaderboard-user-q').innerText = `${solvedQuestions} Soru`;
     }
 
-    // POMODORO MANTIĞI
+    function addAssignment() {
+      const title = document.getElementById('taskTitle').value.trim();
+      const url = document.getElementById('ytUrl').value.trim();
+      if(!title) return alert("Görev adı boş olamaz!");
+
+      const userData = JSON.parse(localStorage.getItem('user_' + currentUser));
+      if(!userData.tasks) userData.tasks = [];
+      userData.tasks.push({ title, url });
+
+      localStorage.setItem('user_' + currentUser, JSON.stringify(userData));
+      document.getElementById('taskTitle').value = "";
+      document.getElementById('ytUrl').value = "";
+      renderTasks();
+    }
+
+    function renderTasks() {
+      const userData = JSON.parse(localStorage.getItem('user_' + currentUser));
+      const tasks = userData.tasks || [];
+
+      const homeList = document.getElementById('homeAssignmentList');
+      const taskList = document.getElementById('assignmentList');
+      
+      homeList.innerHTML = tasks.length === 0 ? '<p style="color:var(--text-dim);">Henüz eklenmiş görev yok.</p>' : '';
+      taskList.innerHTML = tasks.length === 0 ? '<p style="color:var(--text-dim);">Henüz eklenmiş görev yok.</p>' : '';
+
+      tasks.forEach((t, i) => {
+        const itemHtml = `
+          <span><strong>${t.title}</strong> ${t.url ? `<a href="${t.url}" target="_blank" style="color:var(--osym-orange); margin-left:10px;">🎥 İzle</a>` : ''}</span>
+          <button onclick="removeTask(${i})" style="width: auto; padding: 4px 10px; background: var(--danger); font-size: 12px; margin-bottom:0;">Sil</button>
+        `;
+
+        const li1 = document.createElement('li');
+        li1.className = 'item-card';
+        li1.innerHTML = itemHtml;
+        homeList.appendChild(li1);
+
+        const li2 = document.createElement('li');
+        li2.className = 'item-card';
+        li2.innerHTML = itemHtml;
+        taskList.appendChild(li2);
+      });
+    }
+
+    function removeTask(index) {
+      const userData = JSON.parse(localStorage.getItem('user_' + currentUser));
+      userData.tasks.splice(index, 1);
+      localStorage.setItem('user_' + currentUser, JSON.stringify(userData));
+      renderTasks();
+    }
+
+    function classifyError(note) {
+      const normalizedNote = note.toLowerCase();
+      const keywordMap = poolData?.hataAnahtarKelimeleri || fallbackPoolData.hataAnahtarKelimeleri;
+
+      for (const [type, keywords] of Object.entries(keywordMap)) {
+        if (Array.isArray(keywords) && keywords.some(keyword => normalizedNote.includes(keyword.toLowerCase()))) {
+          return type;
+        }
+      }
+
+      return 'bilgi';
+    }
+
+    function updateErrorStats() {
+      const userData = JSON.parse(localStorage.getItem('user_' + currentUser) || '{}');
+      const errors = userData.errors || [];
+      stats = { bilgi: 0, dikkat: 0, sure: 0 };
+
+      errors.forEach(err => {
+        if (stats[err.type] !== undefined) stats[err.type]++;
+      });
+
+      document.getElementById('cntBilgi').innerText = stats.bilgi;
+      document.getElementById('cntDikkat').innerText = stats.dikkat;
+      document.getElementById('cntSure').innerText = stats.sure;
+    }
+
+    function renderErrorHistory() {
+      if (!currentUser) return;
+
+      const userData = JSON.parse(localStorage.getItem('user_' + currentUser) || '{}');
+      const errors = userData.errors || [];
+      const list = document.getElementById('errorList');
+      list.innerHTML = '';
+
+      errors.forEach(err => {
+        const li = document.createElement('li');
+        li.className = 'item-card';
+        li.innerHTML = `<div><strong>[${err.subject}]</strong> ${err.note}</div>`;
+        list.appendChild(li);
+      });
+    }
+
+    function processError() {
+      const note = document.getElementById('errNote').value.trim();
+
+      if(!note) return alert("Lütfen hata açıklaması yazın!");
+
+      const detectedType = classifyError(note);
+      const subject = 'Genel';
+
+      if(detectedType === 'bilgi') stats.bilgi++;
+      if(detectedType === 'dikkat') stats.dikkat++;
+      if(detectedType === 'sure') stats.sure++;
+
+      document.getElementById('cntBilgi').innerText = stats.bilgi;
+      document.getElementById('cntDikkat').innerText = stats.dikkat;
+      document.getElementById('cntSure').innerText = stats.sure;
+
+      if (currentUser) {
+        const userData = JSON.parse(localStorage.getItem('user_' + currentUser) || '{}');
+        if (!userData.errors) userData.errors = [];
+        userData.errors.unshift({ subject, type: detectedType, note });
+        localStorage.setItem('user_' + currentUser, JSON.stringify(userData));
+      }
+
+      renderErrorHistory();
+      document.getElementById('errNote').value = "";
+      alert(`Hata kaydedildi! Otomatik sınıflandırma: ${detectedType}`);
+    }
+
     function startPomodoro() {
       clearInterval(pomoInterval);
       pomoInterval = setInterval(() => {
@@ -809,7 +956,7 @@
 
         if(pomoSeconds <= 0) {
           clearInterval(pomoInterval);
-          alert("Pomodoro Tamamlandı! Harika İş.");
+          alert("Pomodoro Tamamlandı!");
         }
       }, 1000);
     }
@@ -831,25 +978,34 @@
       }
     }
 
-    // FLASHCARD MANTIĞI
     function renderFlashcard() {
+      if (!cardsData.length) {
+        document.getElementById('flashcard-text').innerText = 'Flashcard verisi yüklenemedi.';
+        return;
+      }
+
       showingAnswer = false;
-      document.getElementById('flashcard-text').innerText = cardsData[currentCardIndex].q;
+      const card = cardsData[currentCardIndex % cardsData.length];
+      document.getElementById('flashcard-text').innerText = card.q;
     }
     function flipCard() {
+      if (!cardsData.length) return;
+
       showingAnswer = !showingAnswer;
-      document.getElementById('flashcard-text').innerText = showingAnswer ? cardsData[currentCardIndex].a : cardsData[currentCardIndex].q;
+      const card = cardsData[currentCardIndex % cardsData.length];
+      document.getElementById('flashcard-text').innerText = showingAnswer ? card.a : card.q;
     }
     function nextCard() {
+      if (!cardsData.length) return;
       currentCardIndex = (currentCardIndex + 1) % cardsData.length;
       renderFlashcard();
     }
     function prevCard() {
+      if (!cardsData.length) return;
       currentCardIndex = (currentCardIndex - 1 + cardsData.length) % cardsData.length;
       renderFlashcard();
     }
 
-    // HESAPLAYICI MANTIĞI
     function calculateScore() {
       const tr = parseFloat(document.getElementById('calc-tr').value) || 0;
       const sos = parseFloat(document.getElementById('calc-sos').value) || 0;
@@ -860,7 +1016,6 @@
       document.getElementById('calc-result').innerText = `Tahmini TYT Puanı: ${score.toFixed(2)}`;
     }
 
-    // NET GRAFİĞİ (CHART.JS)
     function initNetChart() {
       const ctx = document.getElementById('netChart').getContext('2d');
       const userData = JSON.parse(localStorage.getItem('user_' + currentUser));
@@ -903,17 +1058,58 @@
       initNetChart();
     }
 
-    // DIŞA AKTAR
+    /* ================= DOSYA İÇE / DIŞA AKTARMA VE KONTROL ================= */
+    
+    // Verileri Dosyaya Aktarır (JSON)
     function exportData() {
       const userData = localStorage.getItem('user_' + currentUser);
       const blob = new Blob([userData], { type: 'application/json' });
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
-      a.download = `${currentUser}_YKS_Yedek.json`;
+      a.download = `${currentUser}_PerforXYZs_Havuz_Yedek.json`;
       a.click();
     }
 
-    // ESKİ ÖZELLİKLER (CHAT & YANLIŞ RAPORU)
+    // Dosyadan Okuma ve Hata/Veri Kontrolü Mantığı
+    function importDataFromFile(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const importedContent = JSON.parse(e.target.result);
+
+          // VERİ FORMAT KONTROLÜ (Validation)
+          if (typeof importedContent !== 'object' || importedContent === null) {
+            throw new Error("Geçersiz dosya biçimi!");
+          }
+
+          // Otomatik Kontrol ve Birleştirme
+          const currentUserData = JSON.parse(localStorage.getItem('user_' + currentUser));
+          
+          if(importedContent.tasks && Array.isArray(importedContent.tasks)) {
+            currentUserData.tasks = importedContent.tasks;
+          }
+          if(importedContent.nets && Array.isArray(importedContent.nets)) {
+            currentUserData.nets = importedContent.nets;
+          }
+          if(importedContent.questions) {
+            currentUserData.questions = importedContent.questions;
+          }
+
+          // Güncellenmiş veriyi kaydet ve ekranı tazele
+          localStorage.setItem('user_' + currentUser, JSON.stringify(currentUserData));
+          alert("✅ Dosya başarıyla doğrulandı ve veriler içe aktarıldı!");
+          loadDashboard();
+
+        } catch (err) {
+          alert("❌ HATA: Yüklenen dosya bozuk veya uyumsuz formatta!\n\nDetay: " + err.message);
+        }
+      };
+      reader.readAsText(file);
+    }
+
     function sendChatMessage(e) {
       e.preventDefault();
       const input = document.getElementById('chat-input');
@@ -941,14 +1137,6 @@
         container.appendChild(msgDiv);
       });
       container.scrollTop = container.scrollHeight;
-    }
-
-    function processError() {
-      const note = document.getElementById('errNote').value;
-      if(!note) return alert("Not gir!");
-      stats.bilgi++;
-      document.getElementById('cntBilgi').innerText = stats.bilgi;
-      document.getElementById('errNote').value = "";
     }
 
     function startCountdown() {
