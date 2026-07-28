@@ -40,26 +40,24 @@
     
     nav {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      gap: 15px;
       padding-bottom: 15px;
       border-bottom: 1px solid #334155;
       margin-bottom: 25px;
     }
-    .user-info { display: flex; align-items: center; gap: 15px; }
 
-    /* HAMBURGER MENÜ & SIDEBAR STİLLERİ */
     .menu-btn {
       background: transparent;
       border: none;
       color: var(--text);
-      font-size: 24px;
+      font-size: 28px;
       cursor: pointer;
       width: auto;
-      padding: 5px 10px;
-      margin-bottom: 0;
+      padding: 0 10px;
     }
 
+    /* SIDEBAR (YAN MENÜ) STİLLERİ */
     .sidebar {
       position: fixed;
       top: 0;
@@ -73,9 +71,7 @@
       z-index: 1000;
       padding: 20px;
     }
-
     .sidebar.active { left: 0; }
-
     .sidebar-header {
       display: flex;
       justify-content: space-between;
@@ -84,18 +80,8 @@
       padding-bottom: 15px;
       margin-bottom: 20px;
     }
-
-    .close-btn {
-      background: transparent;
-      border: none;
-      color: var(--text-dim);
-      font-size: 20px;
-      cursor: pointer;
-      width: auto;
-    }
-
+    .close-btn { background: transparent; border: none; color: var(--text-dim); font-size: 22px; cursor: pointer; width: auto; }
     .sidebar-menu { list-style: none; }
-
     .sidebar-menu li a {
       display: flex;
       align-items: center;
@@ -106,61 +92,104 @@
       border-radius: 6px;
       transition: background 0.2s;
     }
-
-    .sidebar-menu li a:hover {
-      background-color: #0f172a;
-      color: var(--accent);
-    }
-
-    .overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.5);
-      display: none;
-      z-index: 999;
-    }
+    .sidebar-menu li a:hover { background-color: #0f172a; color: var(--accent); }
+    .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; z-index: 999; }
     .overlay.active { display: block; }
 
-    /* GERİ SAYIM & HEDEF KARTLARI */
-    .top-stats {
+    /* ================= ÇİZİME ÖZEL ÜST KARTLAR (GRID) ================= */
+    .drawing-top-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
       gap: 20px;
       margin-bottom: 25px;
     }
 
-    .stat-card {
-      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    .user-profile-card {
+      background: var(--card);
       border: 1px solid #334155;
+      border-radius: 16px;
       padding: 20px;
-      border-radius: 12px;
-      position: relative;
-    }
-    .countdown-timer {
-      font-size: 26px;
-      font-weight: bold;
-      color: var(--warning);
-      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     }
 
-    .grid-container {
+    .profile-card-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--accent);
+      background: #0f172a;
+    }
+
+    .profile-card-info h2 { font-size: 20px; color: var(--text); margin-bottom: 5px; }
+    .profile-card-info p { font-size: 14px; color: var(--success); font-weight: 600; }
+    .profile-card-info small { color: var(--text-dim); font-size: 12px; display: block; margin-top: 2px; }
+
+    .timer-card {
+      background: var(--card);
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    .timer-info span { font-size: 14px; color: var(--text-dim); display: block; }
+    .timer-info h2 { font-size: 26px; color: var(--warning); margin-top: 5px; font-weight: bold; }
+
+    /* Analog Saat Simgesi */
+    .clock-icon {
+      width: 65px;
+      height: 65px;
+      border: 4px solid var(--accent);
+      border-radius: 50%;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #0f172a;
+    }
+    .clock-icon::before {
+      content: '';
+      position: absolute;
+      width: 3px;
+      height: 20px;
+      background: var(--accent);
+      top: 10px;
+      border-radius: 2px;
+    }
+    .clock-icon::after {
+      content: '';
+      position: absolute;
+      width: 14px;
+      height: 3px;
+      background: var(--accent);
+      right: 12px;
+      border-radius: 2px;
+    }
+
+    /* ================= ALT GENİŞ ÖDEVLER PANELİ ================= */
+    .full-width-card {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 25px;
+      border: 1px solid #334155;
+      margin-bottom: 25px;
+    }
+    .full-width-card h2 { font-size: 22px; margin-bottom: 15px; color: var(--accent); }
+
+    .bottom-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 20px;
     }
 
-    .card {
-      background-color: var(--card);
-      border-radius: 12px;
-      padding: 20px;
-      border: 1px solid #334155;
-    }
-    .card h2 { font-size: 18px; margin-bottom: 15px; color: var(--accent); }
-
-    /* Form & Input Stilleri */
+    /* FORM VE GİRDİ ELEMANLARI */
     input, textarea, select, button {
       width: 100%;
       padding: 10px;
@@ -170,26 +199,31 @@
       background: #0f172a;
       color: var(--text);
     }
-
-    button {
-      background-color: var(--accent);
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-      border: none;
-      transition: background 0.2s;
-    }
+    input[disabled] { opacity: 0.6; cursor: not-allowed; background: #1e293b; }
+    button { background-color: var(--accent); color: white; font-weight: bold; cursor: pointer; border: none; transition: background 0.2s; }
     button:hover { background-color: var(--accent-hover); }
-    .btn-danger { background-color: var(--danger); width: auto; padding: 6px 12px; }
 
-    /* Etiket & Liste Stilleri */
+    /* KİLİTLİ ALAN UYARI KUTUSU */
+    .lock-notice {
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid var(--warning);
+      color: var(--warning);
+      padding: 10px 15px;
+      border-radius: 8px;
+      font-size: 13px;
+      margin-bottom: 15px;
+    }
+
+    /* ETİKET VE LİSTE STİLLERİ */
     .badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; margin-top: 5px; }
     .badge-dikkat { background: var(--warning); color: #000; }
     .badge-bilgi { background: var(--danger); color: #fff; }
     .badge-sure { background: var(--info); color: #fff; }
 
     .item-list { list-style: none; margin-top: 10px; }
-    .item-card { background: #0f172a; padding: 10px; border-radius: 6px; margin-bottom: 8px; border-left: 4px solid var(--accent); }
+    .item-card { background: #0f172a; padding: 12px; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid var(--accent); }
+    
+    .avatar-large { width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 3px solid var(--accent); margin-bottom: 10px; }
   </style>
 </head>
 <body>
@@ -204,8 +238,8 @@
       <button class="close-btn" onclick="toggleSidebar()">&times;</button>
     </div>
     <ul class="sidebar-menu">
-      <li><a href="#" onclick="toggleSidebar()">🏠 Ana Sayfa</a></li>
-      <li><a href="#" onclick="alert('Ayarlar yakında eklenecek!'); toggleSidebar();">⚙️ Ayarlar</a></li>
+      <li><a href="#" onclick="showSection('home')">🏠 Ana Sayfa</a></li>
+      <li><a href="#" onclick="showSection('settings')">⚙️ Ayarlar</a></li>
       <hr style="border-color:#334155; margin: 10px 0;">
       <li><a href="#" onclick="handleLogout()" style="color:var(--danger);">🚪 Çıkış Yap</a></li>
     </ul>
@@ -227,7 +261,8 @@
 
     <!-- Kayıt Formu -->
     <form id="register-form" onsubmit="handleRegister(event)" style="display: none;">
-      <input type="text" id="reg-username" placeholder="Kullanıcı Adı Seç" required>
+      <input type="text" id="reg-username" placeholder="Kullanıcı Adı Seç (Sabit kalacak)" required>
+      <input type="text" id="reg-displayname" placeholder="Görünen Ad (Örn: Alp)" required>
       <input type="password" id="reg-password" placeholder="Şifre Oluştur" required>
       <button type="submit">Hesap Oluştur</button>
     </form>
@@ -237,93 +272,134 @@
   <div id="dashboard-screen">
     
     <nav>
-      <div style="display: flex; align-items: center; gap: 15px;">
-        <button class="menu-btn" onclick="toggleSidebar()">☰</button>
-        <h1 style="color:var(--accent); font-size:20px;">YKS Otonom Koçluk Paneli</h1>
-      </div>
-      <div class="user-info">
-        <span>Hoş geldin, <strong id="user-display-name" style="color:var(--success);">Öğrenci</strong></span>
-      </div>
+      <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+      <h1 style="color:var(--accent); font-size:20px;">YKS Otonom Koçluk Paneli</h1>
     </nav>
 
-    <!-- Üst İstatistik ve Hedef Kartları -->
-    <div class="top-stats">
+    <!-- GÖRÜNÜM 1: ANA SAYFA -->
+    <div id="section-home">
       
-      <!-- YKS Geri Sayım Kartı -->
-      <div class="stat-card">
-        <span style="color: var(--text-dim); font-size: 13px;">⏱️ YKS Kalan Zaman</span>
-        <div class="countdown-timer" id="yks-countdown">Yükleniyor...</div>
-      </div>
-
-      <!-- Hedef Kartı -->
-      <div class="stat-card">
-        <span style="color: var(--text-dim); font-size: 13px;">🎯 Hedef / Rota</span>
-        <div id="target-display" style="margin-top:8px;">
-          <h3 id="disp-target-university" style="font-size:16px;">Henüz Hedef Girilmedi</h3>
-          <p id="disp-target-rank" style="font-size:13px; color:var(--text-dim);">Hedef Sıralama: -</p>
-        </div>
-        <button onclick="toggleTargetForm()" style="margin-top:10px; background:#334155; font-size:12px; padding:5px;">Hedefi Güncelle</button>
+      <!-- ÇİZİMDEKİ ÜST 2 KART -->
+      <div class="drawing-top-grid">
         
-        <!-- Hedef Güncelleme Formu (Gizli) -->
-        <div id="target-form" style="display:none; margin-top:10px;">
-          <input type="text" id="input-uni" placeholder="Örn: İTÜ Bilgisayar Müh.">
-          <input type="text" id="input-rank" placeholder="Örn: İlk 5.000">
-          <button onclick="saveTarget()">Kaydet</button>
+        <!-- Sol Kart: Profil & Hedef -->
+        <div class="user-profile-card">
+          <img id="card-avatar" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Profil" class="profile-card-avatar">
+          <div class="profile-card-info">
+            <h2>Hoş geldin <span id="card-display-name">Alp</span></h2>
+            <p id="card-target-text">Hedef: Belirtilmedi</p>
+            <small id="card-username-tag">@kullanici</small>
+          </div>
         </div>
+
+        <!-- Sağ Kart: Kalan Süre & Saat İkonu -->
+        <div class="timer-card">
+          <div class="timer-info">
+            <span>Kalan Süre</span>
+            <h2 id="yks-countdown">Yükleniyor...</h2>
+          </div>
+          <div class="clock-icon"></div>
+        </div>
+
       </div>
 
-    </div>
-
-    <!-- Uygulama Modülleri Grid -->
-    <div class="grid-container">
-      
-      <!-- 1. MODÜL: VİDEO VE ÖDEV EKLEME -->
-      <div class="card">
-        <h2>1. Günlük Ödev & Video Entegre Et</h2>
-        <input type="text" id="taskTitle" placeholder="Ders / Konu Adı (Örn: TYT Mat - Üslü Sayılar)">
-        <input type="text" id="ytUrl" placeholder="YouTube Video / Playlist Linki">
-        <button onclick="addAssignment()">Ödeve Ekle</button>
+      <!-- ÇİZİMDEKİ ALT GENİŞ ÖDEVLER ALANI -->
+      <div class="full-width-card">
+        <h2>Ödevler & Video Dersler</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 10px;">
+          <input type="text" id="taskTitle" placeholder="Ders / Konu Adı (Örn: TYT Mat - Üslü Sayılar)">
+          <input type="text" id="ytUrl" placeholder="YouTube Video / Playlist Linki">
+          <button onclick="addAssignment()" style="height: 42px;">Ödeve Ekle</button>
+        </div>
 
         <ul id="assignmentList" class="item-list"></ul>
       </div>
 
-      <!-- 2. MODÜL: AKILLI YANLIŞ HAVUZU -->
-      <div class="card">
-        <h2>2. Yanlış / Hata Girişi Yap</h2>
-        <select id="errSubject">
-          <option value="Matematik">Matematik</option>
-          <option value="Fizik">Fizik</option>
-          <option value="Kimya">Kimya</option>
-          <option value="Biyoloji">Biyoloji</option>
-          <option value="Türkçe">Türkçe</option>
-        </select>
-        <textarea id="errNote" rows="3" placeholder="Ne hatası yaptın? (Örn: 'Soru kökündeki olamaz lafını kaçırdım' veya 'Formülü hatırlayamadım')"></textarea>
-        <button onclick="processError()">Hatayı Analiz Et ve Kaydet</button>
-      </div>
-
-      <!-- 3. MODÜL: GENEL ANALİZ & RAPOR -->
-      <div class="card">
-        <h2>3. Otomatik Hata Raporu</h2>
-        <div id="reportStats">
-          <p>🔴 Bilgi Eksikliği: <strong id="cntBilgi">0</strong></p>
-          <p>🟡 Dikkat / Okuma Hatası: <strong id="cntDikkat">0</strong></p>
-          <p>🔵 Süre / Taktik Hatası: <strong id="cntSure">0</strong></p>
+      <!-- YANLIŞ HAVUZU VE ANALİZ RAPORU -->
+      <div class="bottom-grid">
+        
+        <!-- Yanlış Giriş Kartı -->
+        <div class="full-width-card" style="margin-bottom:0;">
+          <h2 style="font-size:18px;">Yanlış / Hata Girişi Yap</h2>
+          <select id="errSubject">
+            <option value="Matematik">Matematik</option>
+            <option value="Fizik">Fizik</option>
+            <option value="Kimya">Kimya</option>
+            <option value="Biyoloji">Biyoloji</option>
+            <option value="Türkçe">Türkçe</option>
+          </select>
+          <textarea id="errNote" rows="3" placeholder="Ne hatası yaptın? (Örn: 'Soru kökündeki olamaz lafını kaçırdım')"></textarea>
+          <button onclick="processError()">Hatayı Analiz Et ve Kaydet</button>
         </div>
-        <hr style="border-color:#334155; margin: 15px 0;">
-        <h3>Son Eklenen Hatalar:</h3>
-        <ul id="errorList" class="item-list"></ul>
+
+        <!-- Hata Rapor Kartı -->
+        <div class="full-width-card" style="margin-bottom:0;">
+          <h2 style="font-size:18px;">Otomatik Hata Raporu</h2>
+          <div id="reportStats">
+            <p>🔴 Bilgi Eksikliği: <strong id="cntBilgi">0</strong></p>
+            <p>🟡 Dikkat / Okuma Hatası: <strong id="cntDikkat">0</strong></p>
+            <p>🔵 Süre / Taktik Hatası: <strong id="cntSure">0</strong></p>
+          </div>
+          <hr style="border-color:#334155; margin: 15px 0;">
+          <h3 style="font-size:14px; color:var(--text-dim);">Son Eklenen Hatalar:</h3>
+          <ul id="errorList" class="item-list"></ul>
+        </div>
+
       </div>
 
+    </div>
+
+    <!-- GÖRÜNÜM 2: AYARLAR SAYFASI -->
+    <div id="section-settings" style="display: none;">
+      <div class="full-width-card" style="max-width: 600px; margin: 0 auto;">
+        <h2>⚙️ Profil ve Hesap Ayarları</h2>
+        
+        <!-- Profil Resmi Ayarlama -->
+        <div style="text-align: center; margin-bottom: 20px;">
+          <img id="settings-avatar-preview" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="avatar-large"><br>
+          <label style="font-size:12px; color:var(--text-dim); display:block; margin-bottom:5px;">Profil Fotoğrafı Yükle</label>
+          <input type="file" id="avatar-input" accept="image/*" onchange="previewAndSaveAvatar(event)">
+        </div>
+
+        <hr style="border-color:#334155; margin: 20px 0;">
+
+        <!-- Kullanıcı Adı & Görünen Ad -->
+        <label style="font-size: 13px; color: var(--text-dim);">Kullanıcı Adı (Değiştirilemez):</label>
+        <input type="text" id="settings-username" disabled>
+
+        <label style="font-size: 13px; color: var(--text-dim);">Görünen Ad:</label>
+        <input type="text" id="settings-displayname" placeholder="Görünen Adını Yaz">
+
+        <hr style="border-color:#334155; margin: 20px 0;">
+
+        <!-- HEDEF AYARLAMA BÖLÜMÜ (HAFTALIK KİLİTLİ) -->
+        <h3 style="font-size: 16px; color: var(--accent); margin-bottom: 10px;">🎯 Haftalık Hedef Ayarı</h3>
+        
+        <div id="target-lock-msg" class="lock-notice" style="display: none;">
+          🔒 Hedefiniz kilitli! Yeni hedef belirlemek için kilit süresinin dolmasını bekleyin.<br>
+          <strong>Kilit Açılmasına Kalan: <span id="lock-timer">-</span></strong>
+        </div>
+
+        <label style="font-size: 13px; color: var(--text-dim);">Hedef Üniversite:</label>
+        <input type="text" id="settings-uni" placeholder="Örn: İstanbul Teknik Üniversitesi">
+
+        <label style="font-size: 13px; color: var(--text-dim);">Hedef Fakülte / Bölüm:</label>
+        <input type="text" id="settings-faculty" placeholder="Örn: Eczacılık Fakültesi">
+
+        <label style="font-size: 13px; color: var(--text-dim);">Hedef Sıralama:</label>
+        <input type="text" id="settings-rank" placeholder="Örn: 2000">
+
+        <button onclick="saveProfileSettings()" style="margin-top: 10px;">Ayarları Kaydet</button>
+      </div>
     </div>
 
   </div>
 
   <script>
-    // --- GLOBAL DEĞİŞKENLER ---
     let currentUser = null;
     let stats = { bilgi: 0, dikkat: 0, sure: 0 };
+    const defaultAvatar = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
 
-    // --- SIDEBAR MANTIĞI ---
     function toggleSidebar() {
       const sidebar = document.getElementById('sidebar');
       const overlay = document.getElementById('overlay');
@@ -331,7 +407,13 @@
       overlay.classList.toggle('active');
     }
 
-    // --- OTURUM MANTIĞI (AUTH) ---
+    function showSection(sectionName) {
+      document.getElementById('section-home').style.display = sectionName === 'home' ? 'block' : 'none';
+      document.getElementById('section-settings').style.display = sectionName === 'settings' ? 'block' : 'none';
+      if(sectionName === 'settings') checkTargetLockStatus();
+      toggleSidebar();
+    }
+
     function switchAuthTab(type) {
       document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
       if(type === 'login') {
@@ -347,7 +429,8 @@
 
     function handleRegister(e) {
       e.preventDefault();
-      const user = document.getElementById('reg-username').value;
+      const user = document.getElementById('reg-username').value.trim();
+      const displayName = document.getElementById('reg-displayname').value.trim();
       const pass = document.getElementById('reg-password').value;
 
       if(localStorage.getItem('user_' + user)) {
@@ -355,7 +438,18 @@
         return;
       }
 
-      const userData = { password: pass, targetUni: "", targetRank: "", stats: { bilgi: 0, dikkat: 0, sure: 0 } };
+      const userData = {
+        username: user,
+        displayName: displayName,
+        password: pass,
+        avatar: defaultAvatar,
+        targetUni: "",
+        targetFaculty: "Eczacılık",
+        targetRank: "2000",
+        targetUnlockTime: 0, // Kilit Zamanı
+        stats: { bilgi: 0, dikkat: 0, sure: 0 }
+      };
+
       localStorage.setItem('user_' + user, JSON.stringify(userData));
       alert("Kayıt başarılı! Şimdi giriş yapabilirsiniz.");
       switchAuthTab('login');
@@ -363,7 +457,7 @@
 
     function handleLogin(e) {
       e.preventDefault();
-      const user = document.getElementById('login-username').value;
+      const user = document.getElementById('login-username').value.trim();
       const pass = document.getElementById('login-password').value;
 
       const storedUser = localStorage.getItem('user_' + user);
@@ -404,39 +498,132 @@
     function loadDashboard() {
       document.getElementById('auth-screen').style.display = 'none';
       document.getElementById('dashboard-screen').style.display = 'block';
-      document.getElementById('user-display-name').innerText = currentUser;
 
       const userData = JSON.parse(localStorage.getItem('user_' + currentUser));
-      if(userData.targetUni) {
-        document.getElementById('disp-target-university').innerText = userData.targetUni;
-        document.getElementById('disp-target-rank').innerText = "Hedef Sıralama: " + userData.targetRank;
+
+      // Arayüz Bilgilerini Doldur
+      document.getElementById('card-display-name').innerText = userData.displayName || currentUser;
+      document.getElementById('card-username-tag').innerText = "@" + currentUser;
+
+      // Hedef Metnini Oluştur
+      renderTargetCard(userData);
+
+      const avatarSrc = userData.avatar || defaultAvatar;
+      document.getElementById('card-avatar').src = avatarSrc;
+      document.getElementById('settings-avatar-preview').src = avatarSrc;
+
+      // Ayarlar Formunu Doldur
+      document.getElementById('settings-username').value = currentUser;
+      document.getElementById('settings-displayname').value = userData.displayName || "";
+      document.getElementById('settings-uni').value = userData.targetUni || "";
+      document.getElementById('settings-faculty').value = userData.targetFaculty || "";
+      document.getElementById('settings-rank').value = userData.targetRank || "";
+
+      checkTargetLockStatus();
+    }
+
+    function renderTargetCard(userData) {
+      let text = "Hedef: ";
+      if(userData.targetUni) text += userData.targetUni + " ";
+      if(userData.targetFaculty) text += userData.targetFaculty + " ";
+      if(userData.targetRank) text += `(${userData.targetRank}. Sıralama)`;
+      
+      if(!userData.targetUni && !userData.targetFaculty && !userData.targetRank) {
+        text = "Hedef: Henüz Belirtilmedi";
+      }
+
+      document.getElementById('card-target-text').innerText = text;
+    }
+
+    // --- HAFTALIK KİLİT KONTROL MANTIĞI ---
+    function checkTargetLockStatus() {
+      const userData = JSON.parse(localStorage.getItem('user_' + currentUser));
+      const now = new Date().getTime();
+      const unlockTime = userData.targetUnlockTime || 0;
+
+      const uniInput = document.getElementById('settings-uni');
+      const facultyInput = document.getElementById('settings-faculty');
+      const rankInput = document.getElementById('settings-rank');
+      const lockMsg = document.getElementById('target-lock-msg');
+
+      if(now < unlockTime) {
+        // KİLİTLİ DURUM
+        uniInput.disabled = true;
+        facultyInput.disabled = true;
+        rankInput.disabled = true;
+        lockMsg.style.display = 'block';
+
+        const diff = unlockTime - now;
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+        document.getElementById('lock-timer').innerText = `${days} Gün ${hours} Sa ${mins} Dk`;
+      } else {
+        // KİLİT AÇIK DURUM
+        uniInput.disabled = false;
+        facultyInput.disabled = false;
+        rankInput.disabled = false;
+        lockMsg.style.display = 'none';
       }
     }
 
-    // --- HEDEF MANTIĞI ---
-    function toggleTargetForm() {
-      const form = document.getElementById('target-form');
-      form.style.display = form.style.display === 'none' ? 'block' : 'none';
-    }
-
-    function saveTarget() {
-      const uni = document.getElementById('input-uni').value;
-      const rank = document.getElementById('input-rank').value;
-
-      if(!uni || !rank) return alert("Lütfen tüm alanları doldurun!");
-
+    function saveProfileSettings() {
       const userData = JSON.parse(localStorage.getItem('user_' + currentUser));
-      userData.targetUni = uni;
-      userData.targetRank = rank;
+      const now = new Date().getTime();
+
+      const newDisplayName = document.getElementById('settings-displayname').value.trim();
+      const newUni = document.getElementById('settings-uni').value.trim();
+      const newFaculty = document.getElementById('settings-faculty').value.trim();
+      const newRank = document.getElementById('settings-rank').value.trim();
+
+      if(!newDisplayName) return alert("Lütfen görünen ad girin!");
+
+      // Eğer hedef değiştiyse ve kilit açık durumdaysa 7 günlük kilit başlat
+      const isTargetChanged = (newUni !== userData.targetUni) || (newFaculty !== userData.targetFaculty) || (newRank !== userData.targetRank);
+
+      if(isTargetChanged) {
+        if(now < (userData.targetUnlockTime || 0)) {
+          alert("Hedefiniz henüz kilitli! Süre dolmadan değiştiremezsiniz.");
+          return;
+        }
+        // 7 Gün = 7 * 24 * 60 * 60 * 1000 Milisaniye
+        const sevenDaysInMs = 7 * 24 * 60 * 60 * 1000;
+        userData.targetUnlockTime = now + sevenDaysInMs;
+      }
+
+      userData.displayName = newDisplayName;
+      userData.targetUni = newUni;
+      userData.targetFaculty = newFaculty;
+      userData.targetRank = newRank;
 
       localStorage.setItem('user_' + currentUser, JSON.stringify(userData));
 
-      document.getElementById('disp-target-university').innerText = uni;
-      document.getElementById('disp-target-rank').innerText = "Hedef Sıralama: " + rank;
-      toggleTargetForm();
+      // Arayüzü Güncelle
+      document.getElementById('card-display-name').innerText = newDisplayName;
+      renderTargetCard(userData);
+      checkTargetLockStatus();
+
+      alert(isTargetChanged ? "Hedefleriniz kaydedildi ve 1 haftalığına kilitlendi! 🎯" : "Profil ayarlarınız kaydedildi!");
     }
 
-    // --- YKS GERİ SAYIM SAYACI ---
+    function previewAndSaveAvatar(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const base64Image = e.target.result;
+        document.getElementById('card-avatar').src = base64Image;
+        document.getElementById('settings-avatar-preview').src = base64Image;
+
+        const userData = JSON.parse(localStorage.getItem('user_' + currentUser));
+        userData.avatar = base64Image;
+        localStorage.setItem('user_' + currentUser, JSON.stringify(userData));
+      };
+      reader.readAsDataURL(file);
+    }
+
     function startCountdown() {
       const yksDate = new Date("June 20, 2027 10:15:00").getTime();
 
@@ -445,14 +632,10 @@
         const distance = yksDate - now;
 
         const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-
-        document.getElementById("yks-countdown").innerHTML = `${days} Gün ${hours} Sa ${minutes} Dk`;
+        document.getElementById("yks-countdown").innerHTML = `${days} Gün`;
       }, 1000);
     }
 
-    // --- ÖDEV & VİDEO EKLEME ---
     function addAssignment() {
       const title = document.getElementById('taskTitle').value;
       const url = document.getElementById('ytUrl').value;
@@ -461,7 +644,7 @@
       let embedHtml = "";
       if(url.includes("watch?v=")) {
         const videoId = url.split("v=")[1].split("&")[0];
-        embedHtml = `<iframe width="100%" height="160" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen style="margin-top:8px; border-radius:6px;"></iframe>`;
+        embedHtml = `<iframe width="100%" height="200" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen style="margin-top:10px; border-radius:8px;"></iframe>`;
       }
 
       const list = document.getElementById('assignmentList');
@@ -479,7 +662,6 @@
       document.getElementById('ytUrl').value = "";
     }
 
-    // --- HATA DETEKTÖRÜ ---
     function processError() {
       const subject = document.getElementById('errSubject').value;
       const note = document.getElementById('errNote').value.toLowerCase();
